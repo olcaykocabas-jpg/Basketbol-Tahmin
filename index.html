@@ -1,182 +1,282 @@
 <!doctype html>
 <html lang="tr">
 <head>
-<meta charset="UTF-8">
+<meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#111827">
 <title>Basketbol Tahmin</title>
 <style>
-body{margin:0;background:#f3f4f6;font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:#111827}
-main{max-width:650px;margin:auto;padding:16px}.box{background:white;border-radius:18px;padding:18px;margin:12px 0;box-shadow:0 2px 10px #0001}
-h1{margin:0 0 5px}.small{color:#6b7280;font-size:13px}
-input,button{width:100%;padding:14px;margin-top:10px;border-radius:12px;border:1px solid #ddd;font-size:16px;box-sizing:border-box}
-button{background:#111827;color:white;font-weight:bold;border:0}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.score{text-align:center;font-size:36px;font-weight:bold;margin:18px}
-.row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #eee}
-.err{color:#b91c1c;font-size:13px;margin-top:8px}
+*{box-sizing:border-box}
+body{margin:0;background:#f3f4f6;font-family:-apple-system,BlinkMacSystemFont,Arial;color:#111827}
+main{max-width:700px;margin:auto;padding:15px}
+.box{background:white;border-radius:20px;padding:20px;margin:12px 0;box-shadow:0 3px 15px #0001}
+h1{margin:0 0 5px;font-size:28px}
+.small{color:#6b7280}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+label{font-size:13px;color:#6b7280}
+input,button{width:100%;padding:15px;margin-top:7px;border-radius:13px;font-size:16px}
+input{border:1px solid #d1d5db}
+button{border:0;background:#111827;color:white;font-weight:bold}
+.score{text-align:center;font-size:42px;font-weight:800;margin:20px}
+.row{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid #eee}
 .hide{display:none}
+.good{color:#15803d}
+.bad{color:#b91c1c}
 </style>
 </head>
+
 <body>
 <main>
 
 <div id="login" class="box">
 <h1>🔐 Basketbol Tahmin</h1>
-<div class="small">Özel kullanım</div>
-<input id="password" type="password" placeholder="Şifre">
-<button onclick="giris()">Giriş Yap</button>
-<div id="error" class="err"></div>
+<p class="small">Özel kullanım</p>
+<input id="pass" type="password" placeholder="Şifre">
+<button onclick="login()">Giriş Yap</button>
+<p id="loginMsg" class="bad"></p>
 </div>
 
 <div id="app" class="hide">
 
 <div class="box">
 <h1>🏀 Basketbol Tahmin</h1>
-<div class="small">İnternetten güncel takım verilerini çek.</div>
+<p class="small">İnternetten takım verilerini alır ve tahmini skor hesaplar.</p>
 </div>
 
 <div class="box">
 <div class="grid">
 <div>
-<div class="small">EV SAHİBİ</div>
-<input id="home" value="Türkiye">
+<label>EV SAHİBİ</label>
+<input id="home" value="Melbourne">
 </div>
 <div>
-<div class="small">DEPLASMAN</div>
-<input id="away" value="İtalya">
+<label>DEPLASMAN</label>
+<input id="away" value="I.Hawks">
 </div>
 </div>
 
-<button onclick="tahmin()">🌐 VERİLERİ ÇEK VE TAHMİN ET</button>
-<div id="status" class="small"></div>
+<button onclick="start()">🌐 VERİLERİ ÇEK VE TAHMİN ET</button>
+<p id="status" class="small"></p>
 </div>
 
-<div id="sonuc" class="box hide">
-<div id="isim" class="small"></div>
-<div id="skor" class="score"></div>
-<div class="row"><span>Ev sahibi kazanma</span><b id="oran"></b></div>
-<div class="row"><span>Güven</span><b id="guven"></b></div>
-<div class="row"><span>Ev sahibi ortalama</span><b id="hp"></b></div>
-<div class="row"><span>Deplasman ortalama</span><b id="ap"></b></div>
-<div class="row"><span>Ev sahibi yediği</span><b id="ho"></b></div>
-<div class="row"><span>Deplasman yediği</span><b id="ao"></b></div>
-</div>
+<div id="result" class="box hide">
+<div id="teams" class="small"></div>
+<div id="score" class="score"></div>
 
-<div class="box small">
-Bu uygulama web üzerinden erişilebilen basketbol verilerini kullanır.
+<div class="row"><span>Ev sahibi kazanma</span><b id="win"></b></div>
+<div class="row"><span>Güven</span><b id="confidence"></b></div>
+<div class="row"><span>Ev sahibi sayı ort.</span><b id="hpts"></b></div>
+<div class="row"><span>Deplasman sayı ort.</span><b id="apts"></b></div>
+<div class="row"><span>Ev sahibi yediği</span><b id="hopp"></b></div>
+<div class="row"><span>Deplasman yediği</span><b id="aopp"></b></div>
+<div class="row"><span>Analiz edilen maç</span><b id="games"></b></div>
 </div>
 
 </div>
+</main>
 
 <script>
-const SIFRE="Yaclo112";
-const API="https://www.sofascore.com/api/v1";
-const PROXY="https://api.allorigins.win/raw?url=";
+const PASSWORD="Yaclo112";
 
-function giris(){
- if(password.value===SIFRE){
-  sessionStorage.giris="1";
-  login.classList.add("hide");
-  app.classList.remove("hide");
- }else error.textContent="Şifre yanlış.";
-}
-if(sessionStorage.giris==="1"){
- login.classList.add("hide");
- app.classList.remove("hide");
+function login(){
+ if(pass.value===PASSWORD){
+  loginMsg.textContent="";
+  document.getElementById("login").classList.add("hide");
+  document.getElementById("app").classList.remove("hide");
+ }else{
+  loginMsg.textContent="Şifre yanlış.";
+ }
 }
 
-async function veri(url){
- let u=PROXY+encodeURIComponent(url);
- let r=await fetch(u);
- if(!r.ok)throw Error("İnternet verisi alınamadı");
- return r.json();
-}
+/*
+ Veri kaynağı:
+ Jina'nın ücretsiz web geçidi üzerinden SofaScore verisi.
+ API anahtarı gerekmez.
+*/
+async function getJSON(url){
+ const targets=[
+  "https://r.jina.ai/"+url,
+  "https://r.jina.ai/http://"+url.replace(/^https?:\/\//,"")
+ ];
 
-async function takim(adi){
- let d=await veri(API+"/search/all?q="+encodeURIComponent(adi));
- let a=(d.results||[])
- .map(x=>x.entity)
- .filter(x=>x&&x.id&&x.sport&&x.sport.slug==="basketball");
-
- return a.find(x=>x.name.toLowerCase()===adi.toLowerCase())||a[0];
-}
-
-function sayi(x){
- return x?.normaltime??x?.current??x?.display??null;
-}
-
-async function maclar(id){
- let sonuc=[];
- for(let p=0;p<3&&sonuc.length<10;p++){
+ for(const u of targets){
   try{
-   let d=await veri(API+"/team/"+id+"/events/last/"+p);
-   for(let e of d.events||[]){
-    let h=sayi(e.homeScore),a=sayi(e.awayScore);
-    if(h!=null&&a!=null)sonuc.push(e);
+   const r=await fetch(u,{cache:"no-store"});
+   if(!r.ok)continue;
+   const text=await r.text();
+
+   try{return JSON.parse(text)}catch(e){}
+
+   const p=text.indexOf("{");
+   const q=text.lastIndexOf("}");
+   if(p>=0&&q>p){
+    try{return JSON.parse(text.slice(p,q+1))}catch(e){}
    }
   }catch(e){}
  }
- return sonuc.slice(0,10);
+ throw new Error("İnternet verisine ulaşılamadı.");
 }
 
-async function hesap(t){
- let ms=await maclar(t.id),atilan=[],yenen=[];
- for(let e of ms){
-  let ev=e.homeTeam.id===t.id;
-  let h=sayi(e.homeScore),a=sayi(e.awayScore);
-  atilan.push(ev?h:a);
-  yenen.push(ev?a:h);
+async function searchTeam(name){
+ const url="https://www.sofascore.com/api/v1/search/all?q="+
+ encodeURIComponent(name);
+
+ const data=await getJSON(url);
+ const arr=data.results||[];
+
+ const teams=arr
+  .map(x=>x.entity)
+  .filter(x=>x&&x.id&&x.name);
+
+ if(!teams.length)return null;
+
+ const exact=teams.find(x=>
+  x.name.toLowerCase()===name.toLowerCase()
+ );
+
+ return exact||teams[0];
+}
+
+async function getGames(teamId){
+ let all=[];
+
+ for(let page=0;page<5;page++){
+  try{
+   const url=
+   "https://www.sofascore.com/api/v1/team/"+
+   teamId+"/events/last/"+page;
+
+   const data=await getJSON(url);
+
+   for(const e of (data.events||[])){
+    if(e.status &&
+       (e.status.type==="finished" ||
+        e.status.type==="finishedbyperiods")){
+
+     const h=e.homeScore?.normaltime;
+     const a=e.awayScore?.normaltime;
+
+     if(Number.isFinite(h)&&Number.isFinite(a))
+       all.push({event:e,home:h,away:a});
+    }
+   }
+  }catch(e){}
  }
- let ort=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null;
- return{
-  ad:t.name,
-  mac:ms.length,
-  ppg:ort(atilan),
-  opp:ort(yenen)
+
+ return all.slice(0,10);
+}
+
+function average(a){
+ if(!a.length)return 0;
+ return a.reduce((x,y)=>x+y,0)/a.length;
+}
+
+async function teamStats(team){
+ const games=await getGames(team.id);
+
+ const scored=[];
+ const conceded=[];
+
+ for(const g of games){
+  const home=g.event.homeTeam.id===team.id;
+
+  scored.push(home?g.home:g.away);
+  conceded.push(home?g.away:g.home);
+ }
+
+ return {
+  name:team.name,
+  games:games.length,
+  scored:average(scored),
+  conceded:average(conceded)
  };
 }
 
-async function tahmin(){
- status.textContent="İnternetten takımlar aranıyor...";
+async function start(){
+ const hname=home.value.trim();
+ const aname=away.value.trim();
+
+ if(!hname||!aname){
+  status.textContent="İki takım adını da yaz.";
+  return;
+ }
+
+ result.classList.add("hide");
+ status.textContent="🔎 Takımlar aranıyor...";
+
  try{
-  let h=await takim(home.value.trim());
-  let a=await takim(away.value.trim());
+  const ht=await searchTeam(hname);
+  const at=await searchTeam(aname);
 
-  if(!h||!a)throw Error("Takım bulunamadı.");
+  if(!ht)throw new Error("Ev sahibi takım bulunamadı.");
+  if(!at)throw new Error("Deplasman takımı bulunamadı.");
 
-  status.textContent="Son 10 maç alınıyor...";
+  status.textContent="📊 Son maçlar internetten alınıyor...";
 
-  let H=await hesap(h);
-  let A=await hesap(a);
+  const H=await teamStats(ht);
+  const A=await teamStats(at);
 
-  if(H.ppg==null||A.ppg==null)
-   throw Error("Yeterli maç verisi bulunamadı.");
+  if(H.games<2||A.games<2)
+   throw new Error(
+    "Bu takımlar için yeterli maç verisi bulunamadı."
+   );
 
-  let hs=H.ppg*.56+A.opp*.44;
-  let as=A.ppg*.56+H.opp*.44;
+  /*
+   Basit tahmin modeli:
+   Hücum gücü + rakibin savunma ortalaması.
+   Ev sahibi avantajı ayrıca eklenir.
+  */
 
-  let fark=hs-as;
-  let olasik=Math.max(5,Math.min(95,50+fark*2.2));
+  let homeScore=
+   (H.scored*0.60+A.conceded*0.40)+2.5;
 
-  let guven=45+Math.min(H.mac,A.mac)*4+Math.abs(fark)*2;
-  guven=Math.min(95,Math.round(guven));
+  let awayScore=
+   (A.scored*0.60+H.conceded*0.40);
 
-  isim.textContent=H.ad+"  -  "+A.ad;
-  skor.textContent=Math.round(hs)+"  -  "+Math.round(as);
-  oran.textContent=Math.round(olasik)+"%";
-  guven.textContent=guven>=80?"Yüksek":guven>=65?"Orta":"Düşük";
-  hp.textContent=H.ppg.toFixed(1);
-  ap.textContent=A.ppg.toFixed(1);
-  ho.textContent=H.opp.toFixed(1);
-  ao.textContent=A.opp.toFixed(1);
+  homeScore=Math.max(40,homeScore);
+  awayScore=Math.max(40,awayScore);
 
-  sonuc.classList.remove("hide");
-  status.textContent="✓ İnternetten veri alındı.";
+  const difference=homeScore-awayScore;
+
+  let probability=
+   50+difference*2.1;
+
+  probability=Math.max(5,Math.min(95,probability));
+
+  let confidence=
+   55+Math.min(H.games,A.games)*3+
+   Math.min(15,Math.abs(difference));
+
+  confidence=Math.min(95,Math.round(confidence));
+
+  teams.textContent=H.name+"  —  "+A.name;
+
+  score.textContent=
+   Math.round(homeScore)+"  -  "+Math.round(awayScore);
+
+  win.textContent=Math.round(probability)+"%";
+
+  confidence.textContent=
+   confidence>=80?"Yüksek":
+   confidence>=65?"Orta":"Düşük";
+
+  hpts.textContent=H.scored.toFixed(1);
+  apts.textContent=A.scored.toFixed(1);
+  hopp.textContent=H.conceded.toFixed(1);
+  aopp.textContent=A.conceded.toFixed(1);
+
+  games.textContent=
+   H.games+" + "+A.games;
+
+  result.classList.remove("hide");
+
+  status.innerHTML=
+   '<span class="good">✓ İnternetten veri alındı.</span>';
+
  }catch(e){
-  status.textContent="⚠ "+e.message;
+  status.innerHTML=
+   '<span class="bad">⚠ '+e.message+'</span>';
  }
 }
 </script>
-</main>
 </body>
 </html>
