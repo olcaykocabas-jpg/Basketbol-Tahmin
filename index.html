@@ -4,279 +4,1000 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Basketbol Tahmin</title>
+
 <style>
 *{box-sizing:border-box}
-body{margin:0;background:#f3f4f6;font-family:-apple-system,BlinkMacSystemFont,Arial;color:#111827}
-main{max-width:700px;margin:auto;padding:15px}
-.box{background:white;border-radius:20px;padding:20px;margin:12px 0;box-shadow:0 3px 15px #0001}
-h1{margin:0 0 5px;font-size:28px}
-.small{color:#6b7280}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-label{font-size:13px;color:#6b7280}
-input,button{width:100%;padding:15px;margin-top:7px;border-radius:13px;font-size:16px}
-input{border:1px solid #d1d5db}
-button{border:0;background:#111827;color:white;font-weight:bold}
-.score{text-align:center;font-size:42px;font-weight:800;margin:20px}
-.row{display:flex;justify-content:space-between;padding:11px 0;border-bottom:1px solid #eee}
-.hide{display:none}
-.good{color:#15803d}
-.bad{color:#b91c1c}
+
+body{
+ margin:0;
+ background:#f3f4f6;
+ font-family:-apple-system,BlinkMacSystemFont,Arial,sans-serif;
+ color:#111827;
+}
+
+main{
+ max-width:700px;
+ margin:auto;
+ padding:15px;
+}
+
+.box{
+ background:white;
+ border-radius:20px;
+ padding:20px;
+ margin:12px 0;
+ box-shadow:0 3px 15px #0001;
+}
+
+h1{
+ margin:0 0 7px;
+ font-size:28px;
+}
+
+.small{
+ color:#6b7280;
+ line-height:1.5;
+}
+
+.grid{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:10px;
+}
+
+label{
+ font-size:13px;
+ color:#6b7280;
+}
+
+input,button{
+ width:100%;
+ padding:15px;
+ margin-top:7px;
+ border-radius:13px;
+ font-size:16px;
+}
+
+input{
+ border:1px solid #d1d5db;
+}
+
+button{
+ border:0;
+ background:#111827;
+ color:white;
+ font-weight:bold;
+}
+
+button:disabled{
+ opacity:.6;
+}
+
+.score{
+ text-align:center;
+ font-size:42px;
+ font-weight:800;
+ margin:20px;
+}
+
+.row{
+ display:flex;
+ justify-content:space-between;
+ gap:15px;
+ padding:12px 0;
+ border-bottom:1px solid #eee;
+}
+
+.hide{
+ display:none;
+}
+
+.good{
+ color:#15803d;
+}
+
+.bad{
+ color:#b91c1c;
+}
+
+.loading{
+ text-align:center;
+ padding:15px;
+}
+
+@media(max-width:500px){
+ .grid{
+  grid-template-columns:1fr 1fr;
+ }
+}
 </style>
 </head>
 
 <body>
+
 <main>
 
 <div id="login" class="box">
+
 <h1>🔐 Basketbol Tahmin</h1>
-<p class="small">Özel kullanım</p>
-<input id="pass" type="password" placeholder="Şifre">
-<button onclick="login()">Giriş Yap</button>
+
+<p class="small">
+Özel kullanım
+</p>
+
+<input
+ id="pass"
+ type="password"
+ placeholder="Şifre"
+>
+
+<button onclick="login()">
+Giriş Yap
+</button>
+
 <p id="loginMsg" class="bad"></p>
+
 </div>
+
 
 <div id="app" class="hide">
 
 <div class="box">
+
 <h1>🏀 Basketbol Tahmin</h1>
-<p class="small">İnternetten takım verilerini alır ve tahmini skor hesaplar.</p>
+
+<p class="small">
+İnternetten güncel takım maçlarını alır ve tahmini skor hesaplar.
+</p>
+
 </div>
+
 
 <div class="box">
+
 <div class="grid">
+
 <div>
+
 <label>EV SAHİBİ</label>
-<input id="home" value="Melbourne">
-</div>
-<div>
-<label>DEPLASMAN</label>
-<input id="away" value="I.Hawks">
-</div>
+
+<input
+ id="home"
+ value="Melbourne"
+>
+
 </div>
 
-<button onclick="start()">🌐 VERİLERİ ÇEK VE TAHMİN ET</button>
-<p id="status" class="small"></p>
+
+<div>
+
+<label>DEPLASMAN</label>
+
+<input
+ id="away"
+ value="I.Hawks"
+>
+
 </div>
+
+</div>
+
+
+<button
+ id="predictBtn"
+ onclick="start()"
+>
+🌐 VERİLERİ ÇEK VE TAHMİN ET
+</button>
+
+<p id="status" class="small"></p>
+
+</div>
+
 
 <div id="result" class="box hide">
+
 <div id="teams" class="small"></div>
+
 <div id="score" class="score"></div>
 
-<div class="row"><span>Ev sahibi kazanma</span><b id="win"></b></div>
-<div class="row"><span>Güven</span><b id="confidence"></b></div>
-<div class="row"><span>Ev sahibi sayı ort.</span><b id="hpts"></b></div>
-<div class="row"><span>Deplasman sayı ort.</span><b id="apts"></b></div>
-<div class="row"><span>Ev sahibi yediği</span><b id="hopp"></b></div>
-<div class="row"><span>Deplasman yediği</span><b id="aopp"></b></div>
-<div class="row"><span>Analiz edilen maç</span><b id="games"></b></div>
+
+<div class="row">
+<span>Ev sahibi kazanma</span>
+<b id="win"></b>
+</div>
+
+
+<div class="row">
+<span>Güven</span>
+<b id="confidence"></b>
+</div>
+
+
+<div class="row">
+<span>Ev sahibi sayı ort.</span>
+<b id="hpts"></b>
+</div>
+
+
+<div class="row">
+<span>Deplasman sayı ort.</span>
+<b id="apts"></b>
+</div>
+
+
+<div class="row">
+<span>Ev sahibi yediği</span>
+<b id="hopp"></b>
+</div>
+
+
+<div class="row">
+<span>Deplasman yediği</span>
+<b id="aopp"></b>
+</div>
+
+
+<div class="row">
+<span>Analiz edilen maç</span>
+<b id="games"></b>
 </div>
 
 </div>
+
+</div>
+
 </main>
 
+
 <script>
-const PASSWORD="Yaclo112";
+
+const PASSWORD = "Yaclo112";
+
 
 function login(){
- if(pass.value===PASSWORD){
-  loginMsg.textContent="";
+
+ const p=document.getElementById("pass").value;
+
+ if(p===PASSWORD){
+
+  document.getElementById("loginMsg").textContent="";
+
   document.getElementById("login").classList.add("hide");
+
   document.getElementById("app").classList.remove("hide");
+
  }else{
-  loginMsg.textContent="Şifre yanlış.";
+
+  document.getElementById("loginMsg").textContent=
+   "Şifre yanlış.";
+
  }
+
 }
 
-/*
- Veri kaynağı:
- Jina'nın ücretsiz web geçidi üzerinden SofaScore verisi.
- API anahtarı gerekmez.
-*/
-async function getJSON(url){
- const targets=[
-  "https://r.jina.ai/"+url,
-  "https://r.jina.ai/http://"+url.replace(/^https?:\/\//,"")
+
+/* -----------------------------
+   JSON ALMA
+----------------------------- */
+
+async function fetchJSON(url){
+
+ const methods=[
+
+  url,
+
+  "https://r.jina.ai/"+url
+
  ];
 
- for(const u of targets){
+ let lastError=null;
+
+
+ for(const target of methods){
+
   try{
-   const r=await fetch(u,{cache:"no-store"});
-   if(!r.ok)continue;
-   const text=await r.text();
 
-   try{return JSON.parse(text)}catch(e){}
+   const controller=new AbortController();
 
-   const p=text.indexOf("{");
-   const q=text.lastIndexOf("}");
-   if(p>=0&&q>p){
-    try{return JSON.parse(text.slice(p,q+1))}catch(e){}
+   const timer=setTimeout(
+    ()=>controller.abort(),
+    15000
+   );
+
+   const response=await fetch(
+    target,
+    {
+     method:"GET",
+     cache:"no-store",
+     signal:controller.signal
+    }
+   );
+
+   clearTimeout(timer);
+
+   if(!response.ok){
+
+    throw new Error(
+     "HTTP "+response.status
+    );
+
    }
-  }catch(e){}
+
+   const text=await response.text();
+
+   if(!text.trim())
+    throw new Error("Boş cevap");
+
+
+   try{
+
+    return JSON.parse(text);
+
+   }catch(e){}
+
+
+   const start=text.indexOf("{");
+   const end=text.lastIndexOf("}");
+
+   if(start>=0 && end>start){
+
+    return JSON.parse(
+     text.substring(start,end+1)
+    );
+
+   }
+
+   throw new Error("JSON okunamadı");
+
+  }catch(e){
+
+   lastError=e;
+
+  }
+
  }
- throw new Error("İnternet verisine ulaşılamadı.");
-}
 
-async function searchTeam(name){
- const url="https://www.sofascore.com/api/v1/search/all?q="+
- encodeURIComponent(name);
-
- const data=await getJSON(url);
- const arr=data.results||[];
-
- const teams=arr
-  .map(x=>x.entity)
-  .filter(x=>x&&x.id&&x.name);
-
- if(!teams.length)return null;
-
- const exact=teams.find(x=>
-  x.name.toLowerCase()===name.toLowerCase()
+ throw new Error(
+  "İnternet veri bağlantısı kurulamadı."
  );
 
- return exact||teams[0];
 }
 
-async function getGames(teamId){
- let all=[];
 
- for(let page=0;page<5;page++){
-  try{
-   const url=
-   "https://www.sofascore.com/api/v1/team/"+
-   teamId+"/events/last/"+page;
+/* -----------------------------
+   TAKIM ADI NORMALLEŞTİRME
+----------------------------- */
 
-   const data=await getJSON(url);
+function normalizeName(name){
 
-   for(const e of (data.events||[])){
-    if(e.status &&
-       (e.status.type==="finished" ||
-        e.status.type==="finishedbyperiods")){
+ return name
+  .toLowerCase()
+  .replace(/[.\-_'’]/g," ")
+  .replace(/\s+/g," ")
+  .trim();
 
-     const h=e.homeScore?.normaltime;
-     const a=e.awayScore?.normaltime;
+}
 
-     if(Number.isFinite(h)&&Number.isFinite(a))
-       all.push({event:e,home:h,away:a});
-    }
-   }
-  }catch(e){}
+
+/* -----------------------------
+   TAKIM ARAMA
+----------------------------- */
+
+async function searchTeam(name){
+
+ let searchName=name.trim();
+
+
+ /*
+  Kullanıcının yazdığı I.Hawks
+  aslında Illawarra Hawks.
+ */
+
+ if(
+  normalizeName(searchName)==="i hawks" ||
+  normalizeName(searchName)==="ihawks"
+ ){
+
+  searchName="Illawarra Hawks";
+
  }
 
- return all.slice(0,10);
+
+ const url=
+  "https://www.sofascore.com/api/v1/search/all?q="+
+  encodeURIComponent(searchName);
+
+
+ const data=await fetchJSON(url);
+
+
+ const results=Array.isArray(data.results)
+  ? data.results
+  : [];
+
+
+ const teams=results
+  .map(x=>x.entity)
+  .filter(x=>
+   x &&
+   x.id &&
+   x.name
+  );
+
+
+ if(!teams.length)
+  return null;
+
+
+ /*
+  Önce basketbol takımlarını seç.
+ */
+
+ const basketballTeams=teams.filter(t=>{
+
+  const sport=
+   t.sport?.slug ||
+   t.category?.sport?.slug ||
+   "";
+
+  return sport==="basketball";
+
+ });
+
+
+ const candidates=
+  basketballTeams.length
+   ? basketballTeams
+   : teams;
+
+
+ const wanted=normalizeName(searchName);
+
+
+ /*
+  Tam eşleşme
+ */
+
+ const exact=candidates.find(t=>
+  normalizeName(t.name)===wanted
+ );
+
+
+ if(exact)
+  return exact;
+
+
+ /*
+  İçeren eşleşme
+ */
+
+ const partial=candidates.find(t=>{
+
+  const n=normalizeName(t.name);
+
+  return n.includes(wanted) ||
+         wanted.includes(n);
+
+ });
+
+
+ if(partial)
+  return partial;
+
+
+ return candidates[0];
+
 }
 
-function average(a){
- if(!a.length)return 0;
- return a.reduce((x,y)=>x+y,0)/a.length;
+
+/* -----------------------------
+   SKOR OKUMA
+----------------------------- */
+
+function getScore(score){
+
+ if(!score)
+  return null;
+
+
+ const values=[
+
+  score.normaltime,
+
+  score.current,
+
+  score.display,
+
+  score.period2,
+
+  score.period1
+
+ ];
+
+
+ for(const v of values){
+
+  if(
+   typeof v==="number" &&
+   Number.isFinite(v)
+  ){
+
+   return v;
+
+  }
+
+ }
+
+
+ return null;
+
 }
+
+
+/* -----------------------------
+   SON MAÇLAR
+----------------------------- */
+
+async function getGames(teamId){
+
+ let all=[];
+
+
+ for(let page=0;page<5;page++){
+
+  const url=
+   "https://www.sofascore.com/api/v1/team/"+
+   teamId+
+   "/events/last/"+
+   page;
+
+
+  try{
+
+   const data=await fetchJSON(url);
+
+   const events=
+    Array.isArray(data.events)
+     ? data.events
+     : [];
+
+
+   for(const e of events){
+
+    const status=e.status?.type || "";
+
+
+    if(
+     status!=="finished" &&
+     status!=="finishedbyperiods"
+    ){
+
+     continue;
+
+    }
+
+
+    const hs=getScore(e.homeScore);
+    const as=getScore(e.awayScore);
+
+
+    if(
+     hs===null ||
+     as===null
+    ){
+
+     continue;
+
+    }
+
+
+    /*
+     Basketbol dışındaki
+     etkinlikleri alma.
+    */
+
+    const sport=
+     e.tournament?.category?.sport?.slug ||
+     e.sport?.slug ||
+     "basketball";
+
+
+    if(
+     sport &&
+     sport!=="basketball"
+    ){
+
+     continue;
+
+    }
+
+
+    all.push({
+
+     event:e,
+
+     home:hs,
+
+     away:as
+
+    });
+
+   }
+
+  }catch(e){
+
+   console.log(
+    "Sayfa alınamadı:",
+    page,
+    e
+   );
+
+  }
+
+ }
+
+
+ /*
+  Aynı maçı iki kez alma.
+ */
+
+ const unique=[];
+
+ const ids=new Set();
+
+
+ for(const g of all){
+
+  const id=g.event.id;
+
+  if(ids.has(id))
+   continue;
+
+  ids.add(id);
+
+  unique.push(g);
+
+ }
+
+
+ return unique.slice(0,10);
+
+}
+
+
+/* -----------------------------
+   ORTALAMA
+----------------------------- */
+
+function average(values){
+
+ if(!values.length)
+  return 0;
+
+
+ return values.reduce(
+  (a,b)=>a+b,
+  0
+ ) / values.length;
+
+}
+
+
+/* -----------------------------
+   TAKIM İSTATİSTİKLERİ
+----------------------------- */
 
 async function teamStats(team){
- const games=await getGames(team.id);
+
+ const games=
+  await getGames(team.id);
+
 
  const scored=[];
  const conceded=[];
 
- for(const g of games){
-  const home=g.event.homeTeam.id===team.id;
 
-  scored.push(home?g.home:g.away);
-  conceded.push(home?g.away:g.home);
+ for(const g of games){
+
+  const isHome=
+   Number(g.event.homeTeam?.id)===
+   Number(team.id);
+
+
+  if(isHome){
+
+   scored.push(g.home);
+   conceded.push(g.away);
+
+  }else{
+
+   scored.push(g.away);
+   conceded.push(g.home);
+
+  }
+
  }
 
- return {
+
+ return{
+
+  id:team.id,
+
   name:team.name,
+
   games:games.length,
+
   scored:average(scored),
+
   conceded:average(conceded)
+
  };
+
 }
 
-async function start(){
- const hname=home.value.trim();
- const aname=away.value.trim();
 
- if(!hname||!aname){
-  status.textContent="İki takım adını da yaz.";
+/* -----------------------------
+   TAHMİN
+----------------------------- */
+
+async function start(){
+
+ const btn=
+  document.getElementById("predictBtn");
+
+
+ const hname=
+  document.getElementById("home").value.trim();
+
+
+ const aname=
+  document.getElementById("away").value.trim();
+
+
+ const status=
+  document.getElementById("status");
+
+
+ const result=
+  document.getElementById("result");
+
+
+ if(!hname || !aname){
+
+  status.innerHTML=
+   '<span class="bad">'+
+   'İki takım adını da yaz.'+
+   '</span>';
+
   return;
+
  }
 
+
+ btn.disabled=true;
+
  result.classList.add("hide");
- status.textContent="🔎 Takımlar aranıyor...";
+
+
+ status.innerHTML=
+  '<div class="loading">'+
+  '🔎 Takımlar aranıyor...'+
+  '</div>';
+
 
  try{
-  const ht=await searchTeam(hname);
-  const at=await searchTeam(aname);
 
-  if(!ht)throw new Error("Ev sahibi takım bulunamadı.");
-  if(!at)throw new Error("Deplasman takımı bulunamadı.");
+  const ht=
+   await searchTeam(hname);
 
-  status.textContent="📊 Son maçlar internetten alınıyor...";
 
-  const H=await teamStats(ht);
-  const A=await teamStats(at);
-
-  if(H.games<2||A.games<2)
+  if(!ht)
    throw new Error(
-    "Bu takımlar için yeterli maç verisi bulunamadı."
+    "Ev sahibi takım bulunamadı."
    );
 
+
+  status.innerHTML=
+   "🏀 "+ht.name+
+   " bulundu.<br>";
+
+
+  const at=
+   await searchTeam(aname);
+
+
+  if(!at)
+   throw new Error(
+    "Deplasman takımı bulunamadı."
+   );
+
+
+  status.innerHTML+=
+   "🏀 "+at.name+
+   " bulundu.<br>";
+
+
+  status.innerHTML+=
+   "📊 Son maçlar alınıyor...";
+
+
+  const H=
+   await teamStats(ht);
+
+
+  const A=
+   await teamStats(at);
+
+
+  if(H.games<2){
+
+   throw new Error(
+    H.name+
+    " için yeterli maç verisi alınamadı."
+   );
+
+  }
+
+
+  if(A.games<2){
+
+   throw new Error(
+    A.name+
+    " için yeterli maç verisi alınamadı."
+   );
+
+  }
+
+
   /*
-   Basit tahmin modeli:
-   Hücum gücü + rakibin savunma ortalaması.
-   Ev sahibi avantajı ayrıca eklenir.
+   Hücum + rakip savunma
   */
 
   let homeScore=
-   (H.scored*0.60+A.conceded*0.40)+2.5;
+   H.scored*0.60+
+   A.conceded*0.40+
+   2.5;
+
 
   let awayScore=
-   (A.scored*0.60+H.conceded*0.40);
+   A.scored*0.60+
+   H.conceded*0.40;
 
-  homeScore=Math.max(40,homeScore);
-  awayScore=Math.max(40,awayScore);
 
-  const difference=homeScore-awayScore;
+  /*
+   Aşırı uç değerleri sınırla.
+  */
+
+  homeScore=
+   Math.max(
+    50,
+    Math.min(140,homeScore)
+   );
+
+
+  awayScore=
+   Math.max(
+    50,
+    Math.min(140,awayScore)
+   );
+
+
+  const difference=
+   homeScore-awayScore;
+
 
   let probability=
-   50+difference*2.1;
+   50+
+   difference*2.1;
 
-  probability=Math.max(5,Math.min(95,probability));
+
+  probability=
+   Math.max(
+    5,
+    Math.min(95,probability)
+   );
+
 
   let confidence=
-   55+Math.min(H.games,A.games)*3+
-   Math.min(15,Math.abs(difference));
+   55+
+   Math.min(
+    15,
+    Math.min(H.games,A.games)*3
+   )+
+   Math.min(
+    15,
+    Math.abs(difference)
+   );
 
-  confidence=Math.min(95,Math.round(confidence));
 
-  teams.textContent=H.name+"  —  "+A.name;
+  confidence=
+   Math.min(
+    95,
+    Math.round(confidence)
+   );
 
-  score.textContent=
-   Math.round(homeScore)+"  -  "+Math.round(awayScore);
 
-  win.textContent=Math.round(probability)+"%";
+  document.getElementById("teams")
+   .textContent=
+   H.name+"  —  "+A.name;
 
-  confidence.textContent=
-   confidence>=80?"Yüksek":
-   confidence>=65?"Orta":"Düşük";
 
-  hpts.textContent=H.scored.toFixed(1);
-  apts.textContent=A.scored.toFixed(1);
-  hopp.textContent=H.conceded.toFixed(1);
-  aopp.textContent=A.conceded.toFixed(1);
+  document.getElementById("score")
+   .textContent=
+   Math.round(homeScore)+
+   "  -  "+
+   Math.round(awayScore);
 
-  games.textContent=
+
+  document.getElementById("win")
+   .textContent=
+   Math.round(probability)+"%";
+
+
+  document.getElementById("confidence")
+   .textContent=
+   confidence>=80
+    ? "Yüksek"
+    : confidence>=65
+      ? "Orta"
+      : "Düşük";
+
+
+  document.getElementById("hpts")
+   .textContent=
+   H.scored.toFixed(1);
+
+
+  document.getElementById("apts")
+   .textContent=
+   A.scored.toFixed(1);
+
+
+  document.getElementById("hopp")
+   .textContent=
+   H.conceded.toFixed(1);
+
+
+  document.getElementById("aopp")
+   .textContent=
+   A.conceded.toFixed(1);
+
+
+  document.getElementById("games")
+   .textContent=
    H.games+" + "+A.games;
+
 
   result.classList.remove("hide");
 
+
   status.innerHTML=
-   '<span class="good">✓ İnternetten veri alındı.</span>';
+   '<span class="good">'+
+   '✓ İnternetten veri alındı ve tahmin hesaplandı.'+
+   '</span>';
+
 
  }catch(e){
+
+  console.error(e);
+
+
   status.innerHTML=
-   '<span class="bad">⚠ '+e.message+'</span>';
+   '<span class="bad">'+
+   "⚠ "+e.message+
+   "</span>";
+
+
+ }finally{
+
+  btn.disabled=false;
+
  }
+
 }
+
 </script>
+
 </body>
 </html>
