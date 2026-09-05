@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#111827">
+<title>Basketbol Tahmin</title>
+<style>
+body{margin:0;background:#f3f4f6;font-family:-apple-system,BlinkMacSystemFont,sans-serif;color:#111827}
+main{max-width:650px;margin:auto;padding:16px}.box{background:white;border-radius:18px;padding:18px;margin:12px 0;box-shadow:0 2px 10px #0001}
+h1{margin:0 0 5px}.small{color:#6b7280;font-size:13px}
+input,button{width:100%;padding:14px;margin-top:10px;border-radius:12px;border:1px solid #ddd;font-size:16px;box-sizing:border-box}
+button{background:#111827;color:white;font-weight:bold;border:0}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.score{text-align:center;font-size:36px;font-weight:bold;margin:18px}
+.row{display:flex;justify-content:space-between;padding:9px 0;border-bottom:1px solid #eee}
+.err{color:#b91c1c;font-size:13px;margin-top:8px}
+.hide{display:none}
+</style>
+</head>
+<body>
+<main>
+
+<div id="login" class="box">
+<h1>🔐 Basketbol Tahmin</h1>
+<div class="small">Özel kullanım</div>
+<input id="password" type="password" placeholder="Şifre">
+<button onclick="giris()">Giriş Yap</button>
+<div id="error" class="err"></div>
+</div>
+
+<div id="app" class="hide">
+
+<div class="box">
+<h1>🏀 Basketbol Tahmin</h1>
+<div class="small">İnternetten güncel takım verilerini çek.</div>
+</div>
+
+<div class="box">
+<div class="grid">
+<div>
+<div class="small">EV SAHİBİ</div>
+<input id="home" value="Türkiye">
+</div>
+<div>
+<div class="small">DEPLASMAN</div>
+<input id="away" value="İtalya">
+</div>
+</div>
+
+<button onclick="tahmin()">🌐 VERİLERİ ÇEK VE TAHMİN ET</button>
+<div id="status" class="small"></div>
+</div>
+
+<div id="sonuc" class="box hide">
+<div id="isim" class="small"></div>
+<div id="skor" class="score"></div>
+<div class="row"><span>Ev sahibi kazanma</span><b id="oran"></b></div>
+<div class="row"><span>Güven</span><b id="guven"></b></div>
+<div class="row"><span>Ev sahibi ortalama</span><b id="hp"></b></div>
+<div class="row"><span>Deplasman ortalama</span><b id="ap"></b></div>
+<div class="row"><span>Ev sahibi yediği</span><b id="ho"></b></div>
+<div class="row"><span>Deplasman yediği</span><b id="ao"></b></div>
+</div>
+
+<div class="box small">
+Bu uygulama web üzerinden erişilebilen basketbol verilerini kullanır.
+</div>
+
+</div>
+
+<script>
+const SIFRE="Yaclo112";
+const API="https://www.sofascore.com/api/v1";
+const PROXY="https://api.allorigins.win/raw?url=";
+
+function giris(){
+ if(password.value===SIFRE){
+  sessionStorage.giris="1";
+  login.classList.add("hide");
+  app.classList.remove("hide");
+ }else error.textContent="Şifre yanlış.";
+}
+if(sessionStorage.giris==="1"){
+ login.classList.add("hide");
+ app.classList.remove("hide");
+}
+
+async function veri(url){
+ let u=PROXY+encodeURIComponent(url);
+ let r=await fetch(u);
+ if(!r.ok)throw Error("İnternet verisi alınamadı");
+ return r.json();
+}
+
+async function takim(adi){
+ let d=await veri(API+"/search/all?q="+encodeURIComponent(adi));
+ let a=(d.results||[])
+ .map(x=>x.entity)
+ .filter(x=>x&&x.id&&x.sport&&x.sport.slug==="basketball");
+
+ return a.find(x=>x.name.toLowerCase()===adi.toLowerCase())||a[0];
+}
+
+function sayi(x){
+ return x?.normaltime??x?.current??x?.display??null;
+}
+
+async function maclar(id){
+ let sonuc=[];
+ for(let p=0;p<3&&sonuc.length<10;p++){
+  try{
+   let d=await veri(API+"/team/"+id+"/events/last/"+p);
+   for(let e of d.events||[]){
+    let h=sayi(e.homeScore),a=sayi(e.awayScore);
+    if(h!=null&&a!=null)sonuc.push(e);
+   }
+  }catch(e){}
+ }
+ return sonuc.slice(0,10);
+}
+
+async function hesap(t){
+ let ms=await maclar(t.id),atilan=[],yenen=[];
+ for(let e of ms){
+  let ev=e.homeTeam.id===t.id;
+  let h=sayi(e.homeScore),a=sayi(e.awayScore);
+  atilan.push(ev?h:a);
+  yenen.push(ev?a:h);
+ }
+ let ort=a=>a.length?a.reduce((x,y)=>x+y,0)/a.length:null;
+ return{
+  ad:t.name,
+  mac:ms.length,
+  ppg:ort(atilan),
+  opp:ort(yenen)
+ };
+}
+
+async function tahmin(){
+ status.textContent="İnternetten takımlar aranıyor...";
+ try{
+  let h=await takim(home.value.trim());
+  let a=await takim(away.value.trim());
+
+  if(!h||!a)throw Error("Takım bulunamadı.");
+
+  status.textContent="Son 10 maç alınıyor...";
+
+  let H=await hesap(h);
+  let A=await hesap(a);
+
+  if(H.ppg==null||A.ppg==null)
+   throw Error("Yeterli maç verisi bulunamadı.");
+
+  let hs=H.ppg*.56+A.opp*.44;
+  let as=A.ppg*.56+H.opp*.44;
+
+  let fark=hs-as;
+  let olasik=Math.max(5,Math.min(95,50+fark*2.2));
+
+  let guven=45+Math.min(H.mac,A.mac)*4+Math.abs(fark)*2;
+  guven=Math.min(95,Math.round(guven));
+
+  isim.textContent=H.ad+"  -  "+A.ad;
+  skor.textContent=Math.round(hs)+"  -  "+Math.round(as);
+  oran.textContent=Math.round(olasik)+"%";
+  guven.textContent=guven>=80?"Yüksek":guven>=65?"Orta":"Düşük";
+  hp.textContent=H.ppg.toFixed(1);
+  ap.textContent=A.ppg.toFixed(1);
+  ho.textContent=H.opp.toFixed(1);
+  ao.textContent=A.opp.toFixed(1);
+
+  sonuc.classList.remove("hide");
+  status.textContent="✓ İnternetten veri alındı.";
+ }catch(e){
+  status.textContent="⚠ "+e.message;
+ }
+}
+</script>
+</main>
+</body>
+</html>
