@@ -6,192 +6,138 @@
 <title>Basketbol Tahmin</title>
 
 <style>
+
 *{
- box-sizing:border-box;
+  box-sizing:border-box;
 }
 
 body{
- margin:0;
- background:#f3f4f6;
- color:#111827;
- font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  margin:0;
+  background:#f3f4f6;
+  color:#111827;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
 
 main{
- max-width:760px;
- margin:auto;
- padding:14px;
+  max-width:760px;
+  margin:auto;
+  padding:14px;
 }
 
 .box{
- background:#fff;
- border-radius:22px;
- padding:20px;
- margin:14px 0;
- box-shadow:0 4px 18px #00000012;
+  background:#fff;
+  border-radius:22px;
+  padding:20px;
+  margin:14px 0;
+  box-shadow:0 4px 18px #00000012;
 }
 
 h1{
- margin:0 0 8px;
- font-size:28px;
+  margin:0 0 8px;
+  font-size:28px;
 }
 
 h2{
- margin:0 0 12px;
- font-size:21px;
+  margin:0 0 12px;
 }
 
 .small{
- color:#6b7280;
- line-height:1.5;
+  color:#6b7280;
+  font-size:14px;
 }
 
 .grid{
- display:grid;
- grid-template-columns:1fr 1fr;
- gap:12px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
 }
 
 label{
- display:block;
- font-size:13px;
- color:#6b7280;
- margin-bottom:5px;
-}
-
-input,
-button{
- width:100%;
- padding:15px;
- border-radius:14px;
- font-size:16px;
+  display:block;
+  font-size:12px;
+  color:#6b7280;
+  margin-bottom:5px;
+  font-weight:700;
 }
 
 input{
- border:1px solid #d1d5db;
- background:#fff;
+  width:100%;
+  padding:14px;
+  border:1px solid #d1d5db;
+  border-radius:12px;
+  font-size:16px;
+  background:#fff;
 }
 
 button{
- border:0;
- background:#111827;
- color:white;
- font-weight:700;
- margin-top:10px;
+  width:100%;
+  padding:15px;
+  border:0;
+  border-radius:14px;
+  background:#111827;
+  color:#fff;
+  font-size:16px;
+  font-weight:800;
+  margin-top:14px;
 }
 
 button:disabled{
- opacity:.5;
-}
-
-.searchBox{
- position:relative;
-}
-
-.suggestions{
- background:#fff;
- border:1px solid #ddd;
- border-radius:14px;
- margin-top:6px;
- overflow:hidden;
-}
-
-.teamChoice{
- padding:13px;
- border-bottom:1px solid #eee;
- cursor:pointer;
-}
-
-.teamChoice:last-child{
- border-bottom:0;
-}
-
-.teamChoice b{
- display:block;
-}
-
-.teamChoice span{
- font-size:12px;
- color:#6b7280;
-}
-
-.selected{
- background:#f0fdf4;
- border:1px solid #86efac;
- border-radius:14px;
- padding:12px;
- margin-top:8px;
+  opacity:.55;
 }
 
 .score{
- text-align:center;
- font-size:46px;
- font-weight:900;
- margin:18px 0;
+  font-size:42px;
+  font-weight:900;
+  text-align:center;
+  margin:18px 0;
 }
 
 .row{
- display:flex;
- justify-content:space-between;
- gap:15px;
- padding:12px 0;
- border-bottom:1px solid #eee;
+  display:flex;
+  justify-content:space-between;
+  gap:15px;
+  padding:12px 0;
+  border-bottom:1px solid #eee;
 }
 
 .row:last-child{
- border-bottom:0;
+  border-bottom:0;
 }
 
 .good{
- color:#15803d;
+  color:#15803d;
 }
 
 .bad{
- color:#b91c1c;
-}
-
-.hide{
- display:none;
+  color:#b91c1c;
 }
 
 .loading{
- padding:12px;
- background:#f9fafb;
- border-radius:12px;
- margin-top:10px;
+  padding:10px 0;
 }
 
-.match{
- display:flex;
- justify-content:space-between;
- padding:10px 0;
- border-bottom:1px solid #eee;
- font-size:14px;
+.hide{
+  display:none;
 }
 
-.match:last-child{
- border-bottom:0;
+.note{
+  color:#6b7280;
+  font-size:12px;
+  line-height:1.5;
 }
 
-.prob{
- font-size:30px;
- font-weight:800;
- text-align:center;
- margin:10px;
+@media(max-width:500px){
+
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .score{
+    font-size:36px;
+  }
+
 }
 
-.info{
- background:#f8fafc;
- border-radius:15px;
- padding:14px;
- margin-top:12px;
-}
-
-@media(max-width:600px){
- .grid{
-  grid-template-columns:1fr;
- }
-}
 </style>
 </head>
 
@@ -199,1397 +145,1295 @@ button:disabled{
 
 <main>
 
-<!-- GİRİŞ -->
-<div id="login" class="box">
- <h1>🔐 Basketbol Tahmin</h1>
- <p class="small">
-  Özel kullanım paneli
- </p>
-
- <input
-  id="pass"
-  type="password"
-  placeholder="Şifre">
-
- <button onclick="login()">
-  Giriş Yap
- </button>
-
- <p id="loginMsg" class="bad"></p>
+<div class="box">
+  <h1>🏀 Basketbol Tahmin</h1>
+  <div class="small">
+    Güncel internet verileriyle son maç performansına göre tahmin yapar.
+  </div>
 </div>
 
-
-<!-- UYGULAMA -->
-<div id="app" class="hide">
-
-<div class="box">
- <h1>🏀 Basketbol Tahmin</h1>
-
- <p class="small">
-  İnternetten basketbol takımlarını arar,
-  son maçlarını analiz eder ve tahmini skor üretir.
- </p>
-</div>
-
-
-<!-- TAKIM SEÇİMİ -->
 <div class="box">
 
- <h2>Takımları Seç</h2>
+  <div class="grid">
 
- <div class="grid">
+    <div>
+      <label>EV SAHİBİ</label>
+      <input
+        id="home"
+        value="Melbourne United"
+        autocomplete="off">
+    </div>
 
-  <div class="searchBox">
-
-   <label>EV SAHİBİ</label>
-
-   <input
-    id="home"
-    placeholder="Takım adı yazın"
-    autocomplete="off"
-    oninput="searchHome()">
-
-   <div id="homeSuggestions"></div>
-
-   <div id="homeSelected"></div>
+    <div>
+      <label>DEPLASMAN</label>
+      <input
+        id="away"
+        value="Illawarra Hawks"
+        autocomplete="off">
+    </div>
 
   </div>
 
+  <button id="predictBtn">
+    🌐 VERİLERİ ÇEK VE TAHMİN ET
+  </button>
 
-  <div class="searchBox">
-
-   <label>DEPLASMAN</label>
-
-   <input
-    id="away"
-    placeholder="Takım adı yazın"
-    autocomplete="off"
-    oninput="searchAway()">
-
-   <div id="awaySuggestions"></div>
-
-   <div id="awaySelected"></div>
-
-  </div>
-
- </div>
-
-
- <button
-  id="analyseButton"
-  onclick="start()">
-
-  🌐 VERİLERİ ÇEK VE ANALİZ ET
-
- </button>
-
- <div id="status" class="small"></div>
+  <div id="status" class="small"></div>
 
 </div>
 
-
-<!-- SONUÇ -->
 <div id="result" class="box hide">
 
- <h2>📊 Tahmin Sonucu</h2>
+  <h2>📊 Tahmin Sonucu</h2>
 
- <div id="teams" class="small"></div>
+  <div id="teams" class="small"></div>
 
- <div id="score"></div>
+  <div id="score" class="score"></div>
 
- <div class="row">
-  <span>Ev sahibi kazanma</span>
-  <b id="win"></b>
- </div>
+  <div class="row">
+    <span>Ev sahibi kazanma</span>
+    <b id="homeWin"></b>
+  </div>
 
- <div class="row">
-  <span>Deplasman kazanma</span>
-  <b id="awayWin"></b>
- </div>
+  <div class="row">
+    <span>Deplasman kazanma</span>
+    <b id="awayWin"></b>
+  </div>
 
- <div class="row">
-  <span>Güven</span>
-  <b id="confidence"></b>
- </div>
+  <div class="row">
+    <span>Toplam sayı</span>
+    <b id="total"></b>
+  </div>
 
- <div class="row">
-  <span>Ev sahibi sayı ort.</span>
-  <b id="hpts"></b>
- </div>
+  <div class="row">
+    <span>Güven</span>
+    <b id="confidence"></b>
+  </div>
 
- <div class="row">
-  <span>Deplasman sayı ort.</span>
-  <b id="apts"></b>
- </div>
+  <div class="row">
+    <span>Ev sahibi son maç ort.</span>
+    <b id="homeScored"></b>
+  </div>
 
- <div class="row">
-  <span>Ev sahibi yediği ort.</span>
-  <b id="hopp"></b>
- </div>
+  <div class="row">
+    <span>Ev sahibi yediği</span>
+    <b id="homeConceded"></b>
+  </div>
 
- <div class="row">
-  <span>Deplasman yediği ort.</span>
-  <b id="aopp"></b>
- </div>
+  <div class="row">
+    <span>Deplasman son maç ort.</span>
+    <b id="awayScored"></b>
+  </div>
 
- <div class="row">
-  <span>Beklenen toplam sayı</span>
-  <b id="total"></b>
- </div>
+  <div class="row">
+    <span>Deplasman yediği</span>
+    <b id="awayConceded"></b>
+  </div>
 
- <div class="row">
-  <span>Analiz edilen maç</span>
-  <b id="games"></b>
- </div>
+  <div class="row">
+    <span>Analiz edilen maç</span>
+    <b id="games"></b>
+  </div>
 
- <div class="info">
-  <b>Model:</b><br>
-  Son maç performansı + hücum gücü +
-  rakip savunması + ev sahibi avantajı.
- </div>
-
-</div>
-
-
-<!-- MAÇLAR -->
-<div id="matchesBox" class="box hide">
-
- <h2>📅 Analiz Edilen Maçlar</h2>
-
- <div id="homeMatches"></div>
-
- <hr>
-
- <div id="awayMatches"></div>
-
-</div>
+  <p id="details" class="note"></p>
 
 </div>
 
 </main>
 
-
 <script>
 
-/* =========================================================
-   AYARLAR
-========================================================= */
+"use strict";
 
-const PASSWORD="Yaclo112";
+/* =====================================================
+   TEMEL YARDIMCILAR
+===================================================== */
 
-let selectedHome=null;
-let selectedAway=null;
+const $ = id => document.getElementById(id);
 
-let homeTimer=null;
-let awayTimer=null;
+const ALIASES = [
 
+  {
+    keys:["melbourne","melbourne united"],
+    name:"Melbourne United"
+  },
 
-/* =========================================================
-   GİRİŞ
-========================================================= */
+  {
+    keys:["i.hawks","ihawks","illawarra","illawarra hawks"],
+    name:"Illawarra Hawks"
+  },
 
-function login(){
+  {
+    keys:["sydney","sydney kings"],
+    name:"Sydney Kings"
+  },
 
- const value=document.getElementById("pass").value;
+  {
+    keys:["brisbane","brisbane bullets"],
+    name:"Brisbane Bullets"
+  },
 
- if(value===PASSWORD){
+  {
+    keys:["perth","perth wildcats"],
+    name:"Perth Wildcats"
+  },
 
-  document.getElementById("login").classList.add("hide");
-  document.getElementById("app").classList.remove("hide");
+  {
+    keys:["adelaide","adelaide 36ers"],
+    name:"Adelaide 36ers"
+  },
 
- }else{
+  {
+    keys:["new zealand","new zealand breakers"],
+    name:"New Zealand Breakers"
+  },
 
-  document.getElementById("loginMsg").textContent=
-   "Şifre yanlış.";
+  {
+    keys:["cairns","cairns taipans"],
+    name:"Cairns Taipans"
+  },
 
- }
+  {
+    keys:["tasmania","tasmania jackjumpers"],
+    name:"Tasmania JackJumpers"
+  },
+
+  {
+    keys:[
+      "south east melbourne",
+      "se melbourne",
+      "sem"
+    ],
+    name:"South East Melbourne Phoenix"
+  }
+
+];
+
+function norm(value){
+
+  return String(value || "")
+    .toLocaleLowerCase("tr-TR")
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g,"")
+    .replace(/[.'’_-]/g," ")
+    .replace(/\s+/g," ")
+    .trim();
+
 }
 
+function aliasName(name){
 
-/* =========================================================
-   SOFASCORE VERİSİ
-========================================================= */
+  const n = norm(name);
 
-/*
- Birden fazla geçit kullanıyoruz.
- Amaç GitHub Pages üzerinde CORS sorununu azaltmak.
-*/
+  const found = ALIASES.find(a =>
+    a.keys.some(k => norm(k) === n)
+  );
+
+  return found ? found.name : name.trim();
+
+}
+
+function average(values){
+
+  if(!values.length) return 0;
+
+  return values.reduce(
+    (sum,value)=>sum+value,
+    0
+  ) / values.length;
+
+}
+
+function weightedAverage(values){
+
+  if(!values.length) return 0;
+
+  let total = 0;
+  let weightTotal = 0;
+
+  for(let i=0;i<values.length;i++){
+
+    /*
+      En yeni maça daha yüksek ağırlık.
+      İlk sıradaki maç en yeni maçtır.
+    */
+
+    const weight =
+      Math.max(1,values.length-i);
+
+    total += values[i] * weight;
+    weightTotal += weight;
+
+  }
+
+  return total / weightTotal;
+
+}
+
+function clamp(value,min,max){
+
+  return Math.max(
+    min,
+    Math.min(max,value)
+  );
+
+}
+
+/* =====================================================
+   INTERNET / JSON
+===================================================== */
+
+async function getText(url){
+
+  const controller =
+    new AbortController();
+
+  const timer =
+    setTimeout(
+      ()=>controller.abort(),
+      15000
+    );
+
+  try{
+
+    const response =
+      await fetch(
+        url,
+        {
+          method:"GET",
+          cache:"no-store",
+          signal:controller.signal,
+          headers:{
+            "Accept":
+              "application/json,text/plain,*/*"
+          }
+        }
+      );
+
+    if(!response.ok){
+
+      throw new Error(
+        "HTTP " + response.status
+      );
+
+    }
+
+    return await response.text();
+
+  }finally{
+
+    clearTimeout(timer);
+
+  }
+
+}
+
+function parseJSON(text){
+
+  try{
+
+    return JSON.parse(text);
+
+  }catch(e){}
+
+  const first =
+    text.indexOf("{");
+
+  const last =
+    text.lastIndexOf("}");
+
+  if(first >= 0 && last > first){
+
+    try{
+
+      return JSON.parse(
+        text.slice(first,last+1)
+      );
+
+    }catch(e){}
+
+  }
+
+  throw new Error(
+    "Sunucudan geçerli JSON alınamadı."
+  );
+
+}
 
 async function getJSON(url){
 
- const targets=[
+  return parseJSON(
+    await getText(url)
+  );
 
-  "https://r.jina.ai/"+url,
+}
 
-  "https://r.jina.ai/http://"+
-   url.replace(/^https?:\/\//,"")
+/* =====================================================
+   TAKIM ARAMA
+===================================================== */
 
- ];
+async function searchTeam(userName){
 
- let lastError=null;
+  const requested =
+    aliasName(userName);
 
- for(const target of targets){
+  const urls = [
 
-  try{
+    "https://www.sofascore.com/api/v1/search/all?q=" +
+      encodeURIComponent(requested),
 
-   const response=await fetch(
-    target,
-    {
-     method:"GET",
-     cache:"no-store"
-    }
-   );
+    "https://www.sofascore.com/api/v1/search/all?q=" +
+      encodeURIComponent(userName)
 
-   if(!response.ok){
-    continue;
-   }
+  ];
 
-   const text=await response.text();
+  let all = [];
 
-   /* Direkt JSON */
-   try{
-    return JSON.parse(text);
-   }catch(e){}
-
-   /* Metin içinde JSON bul */
-   const first=text.indexOf("{");
-   const last=text.lastIndexOf("}");
-
-   if(first>=0 && last>first){
+  for(const url of urls){
 
     try{
-     return JSON.parse(
-      text.substring(first,last+1)
-     );
+
+      const data =
+        await getJSON(url);
+
+      if(Array.isArray(data.results)){
+
+        all.push(...data.results);
+
+      }
+
     }catch(e){}
-   }
-
-  }catch(error){
-
-   lastError=error;
 
   }
 
- }
+  const entities =
+    all
+      .map(x=>x && x.entity)
+      .filter(Boolean);
 
- throw lastError ||
-  new Error("İnternet verisine ulaşılamadı.");
+  const teams =
+    entities.filter(x =>
 
-}
+      x.id &&
+      x.name &&
+      (
+        !x.sport ||
+        x.sport.slug === "basketball" ||
+        x.sport.name === "Basketball"
+      )
 
+  );
 
-/* =========================================================
-   TAKIM ARAMA
-========================================================= */
+  if(!teams.length){
 
-async function searchTeams(name){
-
- name=name.trim();
-
- if(name.length<2){
-  return [];
- }
-
- const url=
-  "https://www.sofascore.com/api/v1/search/all?q="+
-  encodeURIComponent(name);
-
- const data=await getJSON(url);
-
- const results=data.results || [];
-
- const teams=[];
-
- for(const item of results){
-
-  const entity=item.entity;
-
-  if(!entity)continue;
-
-  /*
-   Sadece gerçek takımları almaya çalışıyoruz.
-  */
-
-  if(
-   entity.id &&
-   entity.name &&
-   (
-    entity.sport?.slug==="basketball" ||
-    entity.category?.sport?.slug==="basketball" ||
-    entity.teamColors ||
-    entity.fullName
-   )
-  ){
-
-   if(!teams.some(t=>t.id===entity.id)){
-    teams.push(entity);
-   }
+    return null;
 
   }
 
- }
+  const wanted =
+    norm(requested);
 
- /*
-  Bazı SofaScore cevaplarında sport bilgisi
-  bulunmayabilir. Bu nedenle ikinci filtre.
- */
+  const exact =
+    teams.find(
+      t=>norm(t.name) === wanted
+    );
 
- if(!teams.length){
+  if(exact){
 
-  for(const item of results){
-
-   const entity=item.entity;
-
-   if(
-    entity &&
-    entity.id &&
-    entity.name &&
-    !teams.some(t=>t.id===entity.id)
-   ){
-
-    teams.push(entity);
-
-   }
+    return exact;
 
   }
 
- }
+  const contains =
+    teams.find(t=>{
 
- return teams.slice(0,8);
-}
+      const n = norm(t.name);
 
+      return (
+        n.includes(wanted) ||
+        wanted.includes(n)
+      );
 
-/* =========================================================
-   EV SAHİBİ ARAMA
-========================================================= */
+    });
 
-function searchHome(){
+  if(contains){
 
- clearTimeout(homeTimer);
-
- const input=
-  document.getElementById("home");
-
- const text=input.value.trim();
-
- selectedHome=null;
-
- document.getElementById(
-  "homeSelected"
- ).innerHTML="";
-
- if(text.length<2){
-
-  document.getElementById(
-   "homeSuggestions"
-  ).innerHTML="";
-
-  return;
- }
-
- document.getElementById(
-  "homeSuggestions"
- ).innerHTML=
-  '<div class="loading">🔎 Takımlar aranıyor...</div>';
-
- homeTimer=setTimeout(async()=>{
-
-  try{
-
-   const teams=await searchTeams(text);
-
-   showSuggestions(
-    teams,
-    "homeSuggestions",
-    "home"
-   );
-
-  }catch(e){
-
-   document.getElementById(
-    "homeSuggestions"
-   ).innerHTML=
-    '<div class="teamChoice">Takım aranamadı.</div>';
+    return contains;
 
   }
 
- },450);
-}
+  const words =
+    wanted
+      .split(" ")
+      .filter(w=>w.length >= 3);
 
+  let best = null;
+  let bestScore = -1;
 
-/* =========================================================
-   DEPLASMAN ARAMA
-========================================================= */
+  for(const team of teams){
 
-function searchAway(){
+    const n =
+      norm(team.name);
 
- clearTimeout(awayTimer);
+    let score = 0;
 
- const input=
-  document.getElementById("away");
+    for(const word of words){
 
- const text=input.value.trim();
+      if(n.includes(word)){
 
- selectedAway=null;
+        score++;
 
- document.getElementById(
-  "awaySelected"
- ).innerHTML="";
+      }
 
- if(text.length<2){
+    }
 
-  document.getElementById(
-   "awaySuggestions"
-  ).innerHTML="";
+    if(score > bestScore){
 
-  return;
- }
+      bestScore = score;
+      best = team;
 
- document.getElementById(
-  "awaySuggestions"
- ).innerHTML=
-  '<div class="loading">🔎 Takımlar aranıyor...</div>';
-
- awayTimer=setTimeout(async()=>{
-
-  try{
-
-   const teams=await searchTeams(text);
-
-   showSuggestions(
-    teams,
-    "awaySuggestions",
-    "away"
-   );
-
-  }catch(e){
-
-   document.getElementById(
-    "awaySuggestions"
-   ).innerHTML=
-    '<div class="teamChoice">Takım aranamadı.</div>';
+    }
 
   }
 
- },450);
-}
-
-
-/* =========================================================
-   TAKIM SONUÇLARINI GÖSTER
-========================================================= */
-
-function showSuggestions(
- teams,
- containerId,
- type
-){
-
- const box=
-  document.getElementById(containerId);
-
- box.innerHTML="";
-
- if(!teams.length){
-
-  box.innerHTML=
-   '<div class="teamChoice">Takım bulunamadı.</div>';
-
-  return;
- }
-
- teams.forEach(team=>{
-
-  const div=
-   document.createElement("div");
-
-  div.className="teamChoice";
-
-  const category=
-   team.category?.name ||
-   team.tournament?.name ||
-   "";
-
-  div.innerHTML=
-   "<b>"+
-   escapeHTML(team.name)+
-   "</b>"+
-   "<span>"+
-   escapeHTML(category)+
-   "</span>";
-
-  div.onclick=()=>{
-
-   selectTeam(team,type);
-
-  };
-
-  box.appendChild(div);
-
- });
+  return best || teams[0];
 
 }
 
+/* =====================================================
+   SON MAÇLARI GETİR
+===================================================== */
 
-/* =========================================================
-   TAKIM SEÇ
-========================================================= */
+function numericScore(score){
 
-function selectTeam(team,type){
+  if(!score) return null;
 
- if(type==="home"){
+  const values = [
 
-  selectedHome=team;
+    score.normaltime,
+    score.current,
+    score.display
 
-  document.getElementById(
-   "home"
-  ).value=team.name;
+  ];
 
-  document.getElementById(
-   "homeSuggestions"
-  ).innerHTML="";
+  for(const value of values){
 
-  document.getElementById(
-   "homeSelected"
-  ).innerHTML=
-   '<div class="selected">✓ '+
-   escapeHTML(team.name)+
-   "</div>";
+    if(
+      typeof value === "number" &&
+      Number.isFinite(value)
+    ){
 
- }else{
+      return value;
 
-  selectedAway=team;
+    }
 
-  document.getElementById(
-   "away"
-  ).value=team.name;
+  }
 
-  document.getElementById(
-   "awaySuggestions"
-  ).innerHTML="";
-
-  document.getElementById(
-   "awaySelected"
-  ).innerHTML=
-   '<div class="selected">✓ '+
-   escapeHTML(team.name)+
-   "</div>";
-
- }
+  return null;
 
 }
-
-
-/* =========================================================
-   TAKIM MAÇLARI
-========================================================= */
 
 async function getGames(teamId){
 
- let all=[];
+  const pages = [
+    0,
+    1,
+    2
+  ];
 
- /*
-  Son 5 sayfa.
-  Böylece mümkün olduğunca güncel maçları yakalıyoruz.
- */
+  const all = [];
 
- for(let page=0;page<5;page++){
+  for(const page of pages){
 
-  try{
+    try{
 
-   const url=
-    "https://www.sofascore.com/api/v1/team/"+
-    teamId+
-    "/events/last/"+
-    page;
+      const url =
+        "https://www.sofascore.com/api/v1/team/" +
+        teamId +
+        "/events/last/" +
+        page;
 
-   const data=
-    await getJSON(url);
+      const data =
+        await getJSON(url);
 
-   for(const event of(data.events||[])){
+      const events =
+        Array.isArray(data.events)
+          ? data.events
+          : [];
 
-    if(!event.status)continue;
+      for(const event of events){
 
-    const finished=
-     event.status.type==="finished" ||
-     event.status.type==="finishedbyperiods";
+        if(
+          !event ||
+          !event.homeTeam ||
+          !event.awayTeam
+        ){
 
-    if(!finished)continue;
+          continue;
 
-    const homeScore=
-     event.homeScore?.normaltime ??
-     event.homeScore?.current;
+        }
 
-    const awayScore=
-     event.awayScore?.normaltime ??
-     event.awayScore?.current;
+        const finished =
+          event.status &&
+          (
+            event.status.type === "finished" ||
+            event.status.type === "finishedbyperiods"
+          );
 
-    if(
-     Number.isFinite(homeScore) &&
-     Number.isFinite(awayScore)
-    ){
+        if(!finished){
 
-     all.push({
+          continue;
 
-      event:event,
+        }
 
-      home:homeScore,
+        const homeScore =
+          numericScore(event.homeScore);
 
-      away:awayScore,
+        const awayScore =
+          numericScore(event.awayScore);
 
-      timestamp:event.startTimestamp||0
+        if(
+          homeScore === null ||
+          awayScore === null
+        ){
 
-     });
+          continue;
+
+        }
+
+        all.push({
+
+          id:event.id,
+
+          event:event,
+
+          home:homeScore,
+
+          away:awayScore,
+
+          timestamp:
+            event.startTimestamp || 0
+
+        });
+
+      }
+
+    }catch(e){}
+
+  }
+
+  const unique = [];
+  const seen = new Set();
+
+  for(const game of all){
+
+    if(seen.has(game.id)){
+
+      continue;
 
     }
 
-   }
+    seen.add(game.id);
 
-  }catch(e){
-
-   /*
-    Bir sayfa hata verirse diğer sayfalar
-    çalışmaya devam eder.
-   */
+    unique.push(game);
 
   }
 
- }
+  unique.sort(
+    (a,b)=>b.timestamp-a.timestamp
+  );
 
+  return unique.slice(0,10);
 
- /*
-  Tarihe göre yeniden eskiye sırala.
- */
-
- all.sort(
-  (a,b)=>b.timestamp-a.timestamp
- );
-
-
- /*
-  Aynı maçı iki kez ekleme.
- */
-
- const unique=[];
-
- const seen=new Set();
-
- for(const game of all){
-
-  const id=game.event.id;
-
-  if(!seen.has(id)){
-
-   seen.add(id);
-   unique.push(game);
-
-  }
-
- }
-
- return unique.slice(0,10);
 }
 
-
-/* =========================================================
+/* =====================================================
    TAKIM İSTATİSTİĞİ
-========================================================= */
+===================================================== */
 
 async function teamStats(team){
 
- const games=
-  await getGames(team.id);
+  const games =
+    await getGames(team.id);
 
- const scored=[];
- const conceded=[];
+  const overallScored = [];
+  const overallConceded = [];
 
- const homeScored=[];
- const homeConceded=[];
+  const homeScored = [];
+  const homeConceded = [];
 
- const awayScored=[];
- const awayConceded=[];
+  const awayScored = [];
+  const awayConceded = [];
 
- for(const game of games){
+  for(const game of games){
 
-  const isHome=
-   game.event.homeTeam.id===team.id;
+    const homeId =
+      Number(game.event.homeTeam.id);
 
-  const s=
-   isHome?game.home:game.away;
+    const teamId =
+      Number(team.id);
 
-  const c=
-   isHome?game.away:game.home;
+    const isHome =
+      homeId === teamId;
 
-  scored.push(s);
-  conceded.push(c);
+    const scored =
+      isHome
+        ? game.home
+        : game.away;
 
-  if(isHome){
+    const conceded =
+      isHome
+        ? game.away
+        : game.home;
 
-   homeScored.push(s);
-   homeConceded.push(c);
+    overallScored.push(scored);
+    overallConceded.push(conceded);
 
-  }else{
+    if(isHome){
 
-   awayScored.push(s);
-   awayConceded.push(c);
+      homeScored.push(scored);
+      homeConceded.push(conceded);
+
+    }else{
+
+      awayScored.push(scored);
+      awayConceded.push(conceded);
+
+    }
 
   }
 
- }
+  /*
+    Son maçlar ağırlıklı ortalama.
+  */
 
- return{
+  const scored =
+    weightedAverage(overallScored);
 
-  id:team.id,
+  const conceded =
+    weightedAverage(overallConceded);
 
-  name:team.name,
+  const venueScored =
+    weightedAverage(
+      homeScored.length >= 2
+        ? homeScored
+        : overallScored
+    );
 
-  games:games.length,
+  const venueConceded =
+    weightedAverage(
+      homeConceded.length >= 2
+        ? homeConceded
+        : overallConceded
+    );
 
-  gamesData:games,
+  const awayVenueScored =
+    weightedAverage(
+      awayScored.length >= 2
+        ? awayScored
+        : overallScored
+    );
 
-  scored:average(scored),
+  const awayVenueConceded =
+    weightedAverage(
+      awayConceded.length >= 2
+        ? awayConceded
+        : overallConceded
+    );
 
-  conceded:average(conceded),
+  /*
+    Son 5 maç.
+  */
 
-  homeScored:average(homeScored),
+  const recent5 =
+    games.slice(0,5);
 
-  homeConceded:average(homeConceded),
+  const recentScored = [];
+  const recentConceded = [];
 
-  awayScored:average(awayScored),
+  for(const game of recent5){
 
-  awayConceded:average(awayConceded)
+    const homeId =
+      Number(game.event.homeTeam.id);
 
- };
+    if(homeId === Number(team.id)){
+
+      recentScored.push(game.home);
+      recentConceded.push(game.away);
+
+    }else{
+
+      recentScored.push(game.away);
+      recentConceded.push(game.home);
+
+    }
+
+  }
+
+  return {
+
+    id:team.id,
+
+    name:team.name,
+
+    games:games.length,
+
+    scored:scored,
+
+    conceded:conceded,
+
+    homeScored:venueScored,
+
+    homeConceded:venueConceded,
+
+    awayScored:awayVenueScored,
+
+    awayConceded:awayVenueConceded,
+
+    recentScored:
+      weightedAverage(recentScored),
+
+    recentConceded:
+      weightedAverage(recentConceded)
+
+  };
 
 }
 
-
-/* =========================================================
-   ORTALAMA
-========================================================= */
-
-function average(arr){
-
- if(!arr.length)return 0;
-
- return arr.reduce(
-  (sum,value)=>sum+value,
-  0
- )/arr.length;
-
-}
-
-
-/* =========================================================
-   SONUÇLARI HESAPLA
-========================================================= */
+/* =====================================================
+   TAHMİN MOTORU
+===================================================== */
 
 function calculatePrediction(H,A){
 
- /*
-  Genel hücum
- */
+  /*
+    EV TAKIMI
 
- const homeAttack=
-  H.scored;
+    Kendi evindeki hücum
+    + rakibin deplasmanda yediği
+    + genel hücum
+    + son form
+  */
 
- const awayAttack=
-  A.scored;
+  const homeBase =
 
- /*
-  Rakip savunması
- */
+    H.homeScored * 0.38 +
 
- const homeDefense=
-  A.conceded;
+    A.awayConceded * 0.27 +
 
- const awayDefense=
-  H.conceded;
+    H.scored * 0.20 +
 
-
- /*
-  Temel skor.
-
-  Takımın attığı sayı %55
-  Rakibin yediği sayı %45
- */
-
- let homeScore=
-  homeAttack*0.55+
-  homeDefense*0.45;
-
- let awayScore=
-  awayAttack*0.55+
-  awayDefense*0.45;
+    H.recentScored * 0.15;
 
 
- /*
-  Ev sahibi avantajı.
- */
+  /*
+    DEPLASMAN TAKIMI
 
- homeScore+=2.5;
+    Kendi deplasman hücumu
+    + ev sahibinin evde yediği
+    + genel hücum
+    + son form
+  */
 
+  const awayBase =
 
- /*
-  Eğer yeterli ev/deplasman verisi varsa
-  bunu da modele kat.
- */
+    A.awayScored * 0.38 +
 
- if(H.homeScored>0){
+    H.homeConceded * 0.27 +
 
-  homeScore=
-   homeScore*0.75+
-   H.homeScored*0.25;
+    A.scored * 0.20 +
 
- }
-
- if(A.awayScored>0){
-
-  awayScore=
-   awayScore*0.75+
-   A.awayScored*0.25;
-
- }
+    A.recentScored * 0.15;
 
 
- /*
-  Çok düşük / aşırı yüksek hataları önle.
- */
+  /*
+    Savunma düzeltmesi.
 
- homeScore=
-  Math.max(50,Math.min(150,homeScore));
+    İyi savunma rakibin beklenen skorunu
+    aşağı çeker.
+  */
 
- awayScore=
-  Math.max(50,Math.min(150,awayScore));
+  const homeDefenseFactor =
+    clamp(
+      1 +
+      (72 - A.awayConceded) / 500,
+      0.92,
+      1.08
+    );
 
-
- /*
-  Fark
- */
-
- const difference=
-  homeScore-awayScore;
-
-
- /*
-  Kazanma olasılığı.
-
-  Fark arttıkça olasılık artar.
- */
-
- let homeProbability=
-  50+difference*2.2;
-
- homeProbability=
-  Math.max(
-   5,
-   Math.min(95,homeProbability)
-  );
+  const awayDefenseFactor =
+    clamp(
+      1 +
+      (72 - H.homeConceded) / 500,
+      0.92,
+      1.08
+    );
 
 
- const awayProbability=
-  100-homeProbability;
+  let homeScore =
+    homeBase *
+    homeDefenseFactor;
 
 
- /*
-  Form güveni.
-
-  Daha fazla maç = daha yüksek güven.
- */
-
- const games=
-  Math.min(
-   H.games,
-   A.games
-  );
-
- let confidence=
-  52+
-  games*3+
-  Math.min(
-   18,
-   Math.abs(difference)
-  );
+  let awayScore =
+    awayBase *
+    awayDefenseFactor;
 
 
- confidence=
-  Math.max(
-   50,
-   Math.min(95,confidence)
-  );
+  /*
+    EV SAHİBİ AVANTAJI
+
+    Sabit 2.5 yerine daha kontrollü
+    2.0 sayı kullanıyoruz.
+  */
+
+  homeScore += 2.0;
 
 
- /*
-  Son maçların birbirine yakınlığı
-  güveni etkiler.
- */
+  /*
+    FORM FARKI
 
- const homeConsistency=
-  consistency(H.gamesData,H.id);
+    Son 5 maçta belirgin fark varsa
+    küçük düzeltme yap.
+  */
 
- const awayConsistency=
-  consistency(A.gamesData,A.id);
+  const homeFormDiff =
+    H.recentScored -
+    H.recentConceded;
 
-
- const consistencyBonus=
-  (
-   homeConsistency+
-   awayConsistency
-  )/2;
+  const awayFormDiff =
+    A.recentScored -
+    A.recentConceded;
 
 
- confidence=
-  Math.min(
-   95,
-   confidence+consistencyBonus*0.1
-  );
+  homeScore +=
+    clamp(
+      homeFormDiff * 0.08,
+      -2.5,
+      2.5
+    );
 
 
- return{
+  awayScore +=
+    clamp(
+      awayFormDiff * 0.08,
+      -2.5,
+      2.5
+    );
 
-  homeScore,
 
-  awayScore,
+  /*
+    Mantıklı basketbol skor aralığı.
+  */
 
-  homeProbability,
+  homeScore =
+    clamp(homeScore,65,145);
 
-  awayProbability,
+  awayScore =
+    clamp(awayScore,65,145);
 
-  confidence,
 
-  total:
-   homeScore+awayScore
+  /*
+    Aşırı uç farkları yumuşat.
 
- };
+    Ama takımların gerçekten güçlü/zayıf
+    olduğu durumlarda farkı tamamen silme.
+  */
+
+  const difference =
+    homeScore - awayScore;
+
+
+  /*
+    Kazanma olasılığı.
+
+    Fark 0 olduğunda yaklaşık %50.
+    Fark büyüdükçe favorinin yüzdesi artar.
+  */
+
+  let homeProbability =
+    50 +
+    difference * 2.7;
+
+
+  homeProbability =
+    clamp(
+      homeProbability,
+      5,
+      95
+    );
+
+
+  const awayProbability =
+    100 - homeProbability;
+
+
+  /*
+    VERİ GÜVENİ
+
+    Daha fazla maç + daha tutarlı veriler
+    daha yüksek güven verir.
+  */
+
+  const sample =
+    Math.min(
+      H.games,
+      A.games
+    );
+
+
+  const consistencyHome =
+    Math.abs(
+      H.scored -
+      H.recentScored
+    );
+
+
+  const consistencyAway =
+    Math.abs(
+      A.scored -
+      A.recentScored
+    );
+
+
+  const instability =
+    (
+      consistencyHome +
+      consistencyAway
+    ) / 2;
+
+
+  let confidence =
+    58 +
+
+    Math.min(
+      sample * 2,
+      18
+    ) +
+
+    Math.min(
+      Math.abs(difference) * 1.2,
+      15
+    ) -
+
+    Math.min(
+      instability * 0.5,
+      10
+    );
+
+
+  confidence =
+    clamp(
+      confidence,
+      50,
+      93
+    );
+
+
+  return {
+
+    homeScore,
+
+    awayScore,
+
+    total:
+      homeScore + awayScore,
+
+    difference,
+
+    homeProbability,
+
+    awayProbability,
+
+    confidence
+
+  };
 
 }
 
+/* =====================================================
+   EKRANA YAZ
+===================================================== */
 
-/* =========================================================
-   TUTARLILIK
-========================================================= */
+function showPrediction(H,A,p){
 
-function consistency(games,teamId){
+  $("teams").textContent =
+    H.name +
+    " — " +
+    A.name;
 
- if(!games.length)return 0;
 
- const values=[];
+  $("score").textContent =
+    Math.round(p.homeScore) +
+    "  -  " +
+    Math.round(p.awayScore);
 
- for(const g of games){
 
-  const isHome=
-   g.event.homeTeam.id===teamId;
+  $("homeWin").textContent =
+    Math.round(p.homeProbability) +
+    "%";
 
-  const scored=
-   isHome?g.home:g.away;
 
-  values.push(scored);
+  $("awayWin").textContent =
+    Math.round(p.awayProbability) +
+    "%";
 
- }
 
- if(values.length<2)return 0;
+  $("total").textContent =
+    Math.round(p.total);
 
- const avg=
-  average(values);
 
- const variance=
-  average(
-   values.map(
-    x=>Math.pow(x-avg,2)
-   )
-  );
+  const confidence =
+    Math.round(p.confidence);
 
- const sd=
-  Math.sqrt(variance);
 
- /*
-  Standart sapma düşükse daha tutarlı.
- */
+  $("confidence").textContent =
+    confidence + "%";
 
- return Math.max(
-  0,
-  20-sd
- );
+
+  if(confidence >= 80){
+
+    $("confidence").className =
+      "good";
+
+  }else if(confidence < 65){
+
+    $("confidence").className =
+      "bad";
+
+  }else{
+
+    $("confidence").className = "";
+
+  }
+
+
+  $("homeScored").textContent =
+    H.scored.toFixed(1);
+
+
+  $("homeConceded").textContent =
+    H.conceded.toFixed(1);
+
+
+  $("awayScored").textContent =
+    A.scored.toFixed(1);
+
+
+  $("awayConceded").textContent =
+    A.conceded.toFixed(1);
+
+
+  $("games").textContent =
+    H.games +
+    " + " +
+    A.games;
+
+
+  $("details").textContent =
+
+    "Ev takımının ev hücum ortalaması: " +
+    H.homeScored.toFixed(1) +
+
+    " | Evde yediği: " +
+    H.homeConceded.toFixed(1) +
+
+    " | Deplasman takımının deplasman hücum ortalaması: " +
+    A.awayScored.toFixed(1) +
+
+    " | Deplasmanda yediği: " +
+    A.awayConceded.toFixed(1) +
+
+    ". Son maçlara daha yüksek ağırlık verilmiştir.";
+
+
+  $("result").classList.remove("hide");
 
 }
 
-
-/* =========================================================
-   ANA ANALİZ
-========================================================= */
+/* =====================================================
+   ANA ÇALIŞTIRMA
+===================================================== */
 
 async function start(){
 
- const button=
-  document.getElementById(
-   "analyseButton"
-  );
+  const homeInput =
+    $("home").value.trim();
 
- const status=
-  document.getElementById("status");
-
- const result=
-  document.getElementById("result");
-
- const matchesBox=
-  document.getElementById(
-   "matchesBox"
-  );
+  const awayInput =
+    $("away").value.trim();
 
 
- /*
-  Takım seçilmediyse tekrar arama yap.
- */
+  if(!homeInput || !awayInput){
 
- if(!selectedHome){
+    $("status").innerHTML =
+      '<span class="bad">⚠ İki takım adını da yaz.</span>';
 
-  status.innerHTML=
-   '<span class="bad">⚠ Ev sahibi takım listesinden bir takım seç.</span>';
-
-  return;
-
- }
-
- if(!selectedAway){
-
-  status.innerHTML=
-   '<span class="bad">⚠ Deplasman takım listesinden bir takım seç.</span>';
-
-  return;
-
- }
-
-
- button.disabled=true;
-
- result.classList.add("hide");
-
- matchesBox.classList.add("hide");
-
- status.innerHTML=
-  "🔎 Takımlar doğrulanıyor...";
-
-
- try{
-
-  status.innerHTML=
-   "📊 "+escapeHTML(selectedHome.name)+
-   " maçları alınıyor...";
-
-
-  const H=
-   await teamStats(selectedHome);
-
-
-  status.innerHTML=
-   "📊 "+escapeHTML(selectedAway.name)+
-   " maçları alınıyor...";
-
-
-  const A=
-   await teamStats(selectedAway);
-
-
-  if(H.games<3){
-
-   throw new Error(
-    selectedHome.name+
-    " için yeterli geçmiş maç verisi bulunamadı."
-   );
+    return;
 
   }
 
 
-  if(A.games<3){
+  const button =
+    $("predictBtn");
 
-   throw new Error(
-    selectedAway.name+
-    " için yeterli geçmiş maç verisi bulunamadı."
-   );
+
+  button.disabled = true;
+
+  $("result")
+    .classList
+    .add("hide");
+
+
+  try{
+
+    $("status").innerHTML =
+      "🔎 Ev sahibi takım aranıyor...";
+
+
+    const homeTeam =
+      await searchTeam(homeInput);
+
+
+    if(!homeTeam){
+
+      throw new Error(
+        "Ev sahibi takım bulunamadı."
+      );
+
+    }
+
+
+    $("status").innerHTML =
+      "🏀 " +
+      homeTeam.name +
+      "<br>🔎 Deplasman takımı aranıyor...";
+
+
+    const awayTeam =
+      await searchTeam(awayInput);
+
+
+    if(!awayTeam){
+
+      throw new Error(
+        "Deplasman takımı bulunamadı."
+      );
+
+    }
+
+
+    /*
+      Kullanıcının yazdığı isimlerin
+      gerçekten hangi takımlara eşleştiğini göster.
+    */
+
+    $("status").innerHTML =
+      "🏀 " +
+      homeTeam.name +
+
+      "<br>✈️ " +
+      awayTeam.name +
+
+      "<br>📊 Son maçlar alınıyor...";
+
+
+    const results =
+      await Promise.all([
+
+        teamStats(homeTeam),
+
+        teamStats(awayTeam)
+
+      ]);
+
+
+    const H = results[0];
+
+    const A = results[1];
+
+
+    if(H.games < 3){
+
+      throw new Error(
+        H.name +
+        " için yeterli geçmiş maç verisi alınamadı."
+      );
+
+    }
+
+
+    if(A.games < 3){
+
+      throw new Error(
+        A.name +
+        " için yeterli geçmiş maç verisi alınamadı."
+      );
+
+    }
+
+
+    $("status").innerHTML =
+      "🧮 Takım performansları hesaplanıyor...";
+
+
+    const prediction =
+      calculatePrediction(H,A);
+
+
+    showPrediction(
+      H,
+      A,
+      prediction
+    );
+
+
+    $("status").innerHTML =
+      '<span class="good">✅ Analiz tamamlandı.</span>';
+
+
+  }catch(error){
+
+    $("status").innerHTML =
+      '<span class="bad">⚠ ' +
+      escapeHTML(
+        error.message ||
+        "Bir hata oluştu."
+      ) +
+      '</span>';
+
+  }finally{
+
+    button.disabled = false;
 
   }
 
-
-  status.textContent=
-   "🧮 Takımlar analiz ediliyor...";
-
-
-  const prediction=
-   calculatePrediction(H,A);
-
-
-  /*
-   Takım isimleri
-  */
-
-  document.getElementById(
-   "teams"
-  ).textContent=
-   H.name+"  —  "+A.name;
-
-
-  /*
-   Tahmini skor
-  */
-
-  const scoreElement=
-   document.getElementById("score");
-
-  scoreElement.className="score";
-
-  scoreElement.textContent=
-   Math.round(prediction.homeScore)+
-   "  -  "+
-   Math.round(prediction.awayScore);
-
-
-  /*
-   Olasılıklar
-  */
-
-  document.getElementById(
-   "win"
-  ).textContent=
-   Math.round(
-    prediction.homeProbability
-   )+"%";
-
-
-  document.getElementById(
-   "awayWin"
-  ).textContent=
-   Math.round(
-    prediction.awayProbability
-   )+"%";
-
-
-  /*
-   Güven
-  */
-
-  const conf=
-   Math.round(
-    prediction.confidence
-   );
-
-
-  const confText=
-   conf>=82
-    ?"Çok yüksek"
-    :conf>=72
-     ?"Yüksek"
-     :conf>=62
-      ?"Orta"
-      :"Düşük";
-
-
-  document.getElementById(
-   "confidence"
-  ).textContent=
-   confText+" ("+conf+"%)";
-
-
-  /*
-   İstatistikler
-  */
-
-  document.getElementById(
-   "hpts"
-  ).textContent=
-   H.scored.toFixed(1);
-
-
-  document.getElementById(
-   "apts"
-  ).textContent=
-   A.scored.toFixed(1);
-
-
-  document.getElementById(
-   "hopp"
-  ).textContent=
-   H.conceded.toFixed(1);
-
-
-  document.getElementById(
-   "aopp"
-  ).textContent=
-   A.conceded.toFixed(1);
-
-
-  document.getElementById(
-   "total"
-  ).textContent=
-   Math.round(
-    prediction.total
-   );
-
-
-  document.getElementById(
-   "games"
-  ).textContent=
-   H.games+" + "+A.games;
-
-
-  /*
-   Maç listesini oluştur.
-  */
-
-  renderMatches(
-   H,
-   "homeMatches",
-   "🏠 "+H.name
-  );
-
-  renderMatches(
-   A,
-   "awayMatches",
-   "✈️ "+A.name
-  );
-
-
-  result.classList.remove("hide");
-
-  matchesBox.classList.remove("hide");
-
-
-  status.innerHTML=
-   '<span class="good">✓ İnternetten veriler alındı ve analiz tamamlandı.</span>';
-
-
- }catch(error){
-
-  status.innerHTML=
-   '<span class="bad">⚠ '+
-   escapeHTML(
-    error.message ||
-    "Bir hata oluştu."
-   )+
-   "</span>";
-
- }finally{
-
-  button.disabled=false;
-
- }
-
 }
 
-
-/* =========================================================
-   MAÇLARI GÖSTER
-========================================================= */
-
-function renderMatches(
- stats,
- elementId,
- title
-){
-
- const container=
-  document.getElementById(
-   elementId
-  );
-
- let html=
-  "<h3>"+escapeHTML(title)+"</h3>";
-
-
- for(const game of stats.gamesData){
-
-  const e=game.event;
-
-  const homeName=
-   e.homeTeam?.name ||
-   "Ev sahibi";
-
-  const awayName=
-   e.awayTeam?.name ||
-   "Deplasman";
-
-  const date=
-   e.startTimestamp
-    ?new Date(
-      e.startTimestamp*1000
-     ).toLocaleDateString(
-      "tr-TR"
-     )
-    :"";
-
-
-  html+=
-   '<div class="match">'+
-    "<span>"+
-     escapeHTML(homeName)+
-     " - "+
-     escapeHTML(awayName)+
-     "<br><small>"+
-     date+
-     "</small>"+
-    "</span>"+
-    "<b>"+
-     game.home+
-     " - "+
-     game.away+
-    "</b>"+
-   "</div>";
-
- }
-
- container.innerHTML=html;
-
-}
-
-
-/* =========================================================
-   GÜVENLİ METİN
-========================================================= */
+/* =====================================================
+   HTML GÜVENLİK
+===================================================== */
 
 function escapeHTML(value){
 
- return String(value)
-  .replace(/&/g,"&amp;")
-  .replace(/</g,"&lt;")
-  .replace(/>/g,"&gt;")
-  .replace(/"/g,"&quot;")
-  .replace(/'/g,"&#039;");
+  return String(value)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 
 }
 
+/* =====================================================
+   BUTON
+===================================================== */
 
-/* =========================================================
-   ENTER İLE ANALİZ
-========================================================= */
-
-document.addEventListener(
- "keydown",
- function(e){
-
-  if(
-   e.key==="Enter" &&
-   !document
-    .getElementById("app")
-    .classList.contains("hide")
-  ){
-
-   /*
-    Eğer takım seçim listesi açıksa
-    önce seçim yapılması gerekir.
-   */
-
-   if(
-    selectedHome &&
-    selectedAway
-   ){
-
-    start();
-
-   }
-
-  }
-
- }
-);
+$("predictBtn")
+  .addEventListener(
+    "click",
+    start
+  );
 
 </script>
 
