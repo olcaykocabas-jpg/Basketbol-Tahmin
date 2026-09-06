@@ -1,137 +1,172 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="tr">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>🏀 Basketbol Tahmin</title>
 
 <style>
 *{box-sizing:border-box}
 
 body{
-  margin:0;
-  background:#f3f4f6;
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
-  color:#111827;
+ margin:0;
+ background:#f3f4f6;
+ color:#111827;
+ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
 
 main{
-  max-width:720px;
-  margin:auto;
-  padding:16px;
+ max-width:720px;
+ margin:auto;
+ padding:16px;
 }
 
 .box{
-  background:#fff;
-  border-radius:22px;
-  padding:22px;
-  margin:14px 0;
-  box-shadow:0 4px 18px #00000012;
+ background:#fff;
+ border-radius:22px;
+ padding:22px;
+ margin:14px 0;
+ box-shadow:0 4px 18px #00000012;
 }
 
 h1{
-  margin:0 0 8px;
-  font-size:30px;
+ margin:0 0 8px;
+ font-size:34px;
 }
 
-.small{
-  color:#6b7280;
-  line-height:1.5;
-}
-
-.grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
+.subtitle{
+ color:#6b7280;
+ font-size:18px;
+ line-height:1.45;
 }
 
 label{
-  display:block;
-  font-size:14px;
-  font-weight:700;
-  color:#6b7280;
-  margin-bottom:5px;
-}
-
-input,button{
-  width:100%;
-  padding:16px;
-  border-radius:14px;
-  font-size:17px;
+ display:block;
+ margin:20px 0 8px;
+ font-weight:800;
+ color:#6b7280;
+ font-size:15px;
 }
 
 input{
-  border:1px solid #d1d5db;
-  background:#fff;
+ width:100%;
+ padding:17px;
+ border:2px solid #d1d5db;
+ border-radius:16px;
+ font-size:18px;
+ outline:none;
+}
+
+input:focus{
+ border-color:#111827;
 }
 
 button{
-  border:0;
-  background:#111827;
-  color:white;
-  font-weight:800;
-  margin-top:16px;
+ width:100%;
+ border:0;
+ border-radius:17px;
+ padding:18px;
+ margin-top:20px;
+ background:#111827;
+ color:#fff;
+ font-size:18px;
+ font-weight:800;
 }
 
 button:disabled{
-  opacity:.55;
+ opacity:.55;
 }
+
+.status{
+ margin-top:15px;
+ font-size:16px;
+ line-height:1.5;
+}
+
+.good{color:#15803d}
+.bad{color:#b91c1c}
+.info{color:#374151}
+
+.hidden{display:none}
 
 .score{
-  text-align:center;
-  font-size:44px;
-  font-weight:900;
-  margin:22px 0;
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:12px;
+ margin:20px 0;
 }
 
-.row{
-  display:flex;
-  justify-content:space-between;
-  gap:15px;
-  padding:13px 0;
-  border-bottom:1px solid #eee;
+.team{
+ width:45%;
+ text-align:center;
 }
 
-.row b{
-  text-align:right;
+.teamName{
+ font-size:18px;
+ font-weight:800;
 }
 
-.good{
-  color:#15803d;
+.bigScore{
+ font-size:48px;
+ font-weight:900;
+ margin-top:8px;
 }
 
-.bad{
-  color:#b91c1c;
+.vs{
+ font-weight:900;
+ color:#9ca3af;
 }
 
-.loading{
-  padding:12px 0;
+.grid{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:12px;
 }
 
-.hide{
-  display:none;
+.stat{
+ background:#f3f4f6;
+ border-radius:16px;
+ padding:15px;
 }
 
-.note{
-  font-size:13px;
-  color:#6b7280;
-  line-height:1.5;
+.statTitle{
+ color:#6b7280;
+ font-size:13px;
+ font-weight:700;
 }
 
-.stat-title{
-  font-size:18px;
-  font-weight:800;
-  margin-bottom:8px;
+.statValue{
+ font-size:23px;
+ font-weight:900;
+ margin-top:4px;
 }
 
-@media(max-width:560px){
-  .grid{
-    grid-template-columns:1fr;
-  }
+.winbar{
+ height:18px;
+ background:#e5e7eb;
+ border-radius:99px;
+ overflow:hidden;
+ margin-top:12px;
+}
 
-  h1{
-    font-size:28px;
-  }
+.winhome{
+ height:100%;
+ background:#111827;
+ width:50%;
+}
+
+.small{
+ color:#6b7280;
+ font-size:13px;
+ line-height:1.5;
+ margin-top:15px;
+}
+
+hr{
+ border:0;
+ border-top:1px solid #e5e7eb;
+ margin:20px 0;
 }
 </style>
 </head>
@@ -140,1316 +175,740 @@ button:disabled{
 
 <main>
 
-<div id="login" class="box">
-
-<h1>🔐 Basketbol Tahmin</h1>
-
-<p class="small">
-Özel kullanım
-</p>
-
-<input
-  id="pass"
-  type="password"
-  placeholder="Şifre"
-  autocomplete="off"
->
-
-<button id="loginBtn">
-Giriş Yap
-</button>
-
-<p id="loginMsg" class="bad"></p>
-
-</div>
-
-
-<div id="app" class="hide">
-
 <div class="box">
-
 <h1>🏀 Basketbol Tahmin</h1>
-
-<p class="small">
-Güncel internet verileriyle son maç performansına göre tahmini skor hesaplar.
-</p>
-
+<div class="subtitle">
+Güncel internet verileri ve takımların son maç performansına göre tahmin yapar.
+</div>
 </div>
 
-
 <div class="box">
-
-<div class="grid">
-
-<div>
 
 <label>EV SAHİBİ</label>
-
 <input
- id="home"
+ id="homeInput"
  value="Melbourne United"
- autocomplete="off"
->
-
-</div>
-
-
-<div>
+ placeholder="Örn: Melbourne United"
+ autocomplete="off">
 
 <label>DEPLASMAN</label>
-
 <input
- id="away"
+ id="awayInput"
  value="Illawarra Hawks"
- autocomplete="off"
->
+ placeholder="Örn: Illawarra Hawks"
+ autocomplete="off">
 
-</div>
-
-</div>
-
-
-<button id="predictBtn">
+<button id="analyseButton">
 🌐 VERİLERİ ÇEK VE TAHMİN ET
 </button>
 
-<p id="status" class="small"></p>
+<div id="status" class="status"></div>
 
 </div>
 
+<div id="result" class="box hidden">
 
-<div id="result" class="box hide">
+<h2>📊 Tahmin Sonucu</h2>
 
-<div id="teams" class="small"></div>
+<div id="leagueText" class="small"></div>
 
-<div id="score" class="score"></div>
+<div class="score">
 
-<div class="row">
-<span>Ev sahibi kazanma</span>
-<b id="win"></b>
+<div class="team">
+<div id="homeName" class="teamName"></div>
+<div id="homeScore" class="bigScore">-</div>
 </div>
 
-<div class="row">
-<span>Güven</span>
-<b id="confidence"></b>
+<div class="vs">VS</div>
+
+<div class="team">
+<div id="awayName" class="teamName"></div>
+<div id="awayScore" class="bigScore">-</div>
 </div>
 
-<div class="row">
-<span>Ev sahibi sayı ort.</span>
-<b id="hpts"></b>
 </div>
 
-<div class="row">
-<span>Deplasman sayı ort.</span>
-<b id="apts"></b>
+<hr>
+
+<div class="grid">
+
+<div class="stat">
+<div class="statTitle">EV SAHİBİ KAZANMA</div>
+<div id="homeProb" class="statValue">-</div>
 </div>
 
-<div class="row">
-<span>Ev sahibi yediği</span>
-<b id="hopp"></b>
+<div class="stat">
+<div class="statTitle">DEPLASMAN KAZANMA</div>
+<div id="awayProb" class="statValue">-</div>
 </div>
 
-<div class="row">
-<span>Deplasman yediği</span>
-<b id="aopp"></b>
+<div class="stat">
+<div class="statTitle">EV ORT. SAYI</div>
+<div id="homeAvg" class="statValue">-</div>
 </div>
 
-<div class="row">
-<span>Analiz edilen maç</span>
-<b id="games"></b>
+<div class="stat">
+<div class="statTitle">DEP. ORT. SAYI</div>
+<div id="awayAvg" class="statValue">-</div>
 </div>
 
-<p id="source" class="note"></p>
+<div class="stat">
+<div class="statTitle">EV SAVUNMA</div>
+<div id="homeDef" class="statValue">-</div>
+</div>
 
+<div class="stat">
+<div class="statTitle">DEP. SAVUNMA</div>
+<div id="awayDef" class="statValue">-</div>
+</div>
+
+</div>
+
+<div class="winbar">
+<div id="winHome" class="winhome"></div>
+</div>
+
+<h3 id="winner"></h3>
+
+<div id="confidence"></div>
+
+<div class="small">
+Tahmin geçmiş maç performansına dayalı istatistiksel tahmindir.
+Kesin sonuç değildir.
 </div>
 
 </div>
 
 </main>
 
-
 <script>
 
-"use strict";
-
-
 /* =========================================================
-   AYARLAR
-========================================================= */
+   BASKETBOL TAHMİN MOTORU
+   ========================================================= */
 
-const PASSWORD = "Yaclo112";
+const $ = id => document.getElementById(id);
 
-const API =
-  "https://www.sofascore.com/api/v1";
-
-
-/* =========================================================
-   KISA TAKIM ADLARI
-========================================================= */
-
-const ALIASES = [
-
-  {
-    keys:[
-      "melbourne",
-      "melbourne united"
-    ],
-    name:"Melbourne United"
-  },
-
-  {
-    keys:[
-      "i.hawks",
-      "ihawks",
-      "illawarra",
-      "illawarra hawks",
-      "illawarra hawks basketball"
-    ],
-    name:"Illawarra Hawks"
-  },
-
-  {
-    keys:[
-      "sydney",
-      "sydney kings"
-    ],
-    name:"Sydney Kings"
-  },
-
-  {
-    keys:[
-      "brisbane",
-      "brisbane bullets"
-    ],
-    name:"Brisbane Bullets"
-  },
-
-  {
-    keys:[
-      "perth",
-      "perth wildcats"
-    ],
-    name:"Perth Wildcats"
-  },
-
-  {
-    keys:[
-      "adelaide",
-      "adelaide 36ers"
-    ],
-    name:"Adelaide 36ers"
-  },
-
-  {
-    keys:[
-      "new zealand",
-      "new zealand breakers"
-    ],
-    name:"New Zealand Breakers"
-  },
-
-  {
-    keys:[
-      "cairns",
-      "cairns taipans"
-    ],
-    name:"Cairns Taipans"
-  },
-
-  {
-    keys:[
-      "tasmania",
-      "tasmania jackjumpers"
-    ],
-    name:"Tasmania JackJumpers"
-  },
-
-  {
-    keys:[
-      "south east melbourne",
-      "se melbourne",
-      "sem"
-    ],
-    name:"South East Melbourne Phoenix"
-  }
-
-];
+const statusBox = $("status");
+const resultBox = $("result");
+const button = $("analyseButton");
 
 
-/* =========================================================
-   YARDIMCI
-========================================================= */
+/* ---------------------------------------------------------
+   TAKIM İSİMLERİNİ NORMALLEŞTİR
+--------------------------------------------------------- */
 
-const $ = id =>
-  document.getElementById(id);
+function normalizeName(name){
 
-
-function norm(s){
-
-  return String(s || "")
-    .toLocaleLowerCase("tr-TR")
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g,"")
-    .replace(/[.'’_-]/g," ")
-    .replace(/\s+/g," ")
-    .trim();
+ return name
+  .toLowerCase()
+  .normalize("NFD")
+  .replace(/[\u0300-\u036f]/g,"")
+  .replace(/[^a-z0-9 ]/g," ")
+  .replace(/\s+/g," ")
+  .trim();
 
 }
 
 
-function aliasName(name){
+/* ---------------------------------------------------------
+   BİLİNEN İSİM ALİASLARI
+--------------------------------------------------------- */
 
-  const n = norm(name);
+const aliases = {
 
-  const found =
-    ALIASES.find(a =>
-      a.keys.some(k =>
-        norm(k) === n
-      )
-    );
+ "melbourne united":
+   ["melbourne united","melbourne","united"],
 
-  return found
-    ? found.name
-    : name.trim();
+ "illawarra hawks":
+   ["illawarra hawks","illawarra","hawks"],
 
-}
+ "sydney kings":
+   ["sydney kings","sydney"],
 
+ "brisbane bullets":
+   ["brisbane bullets","brisbane"],
 
-/* =========================================================
-   JSON OKUMA
-========================================================= */
+ "perth wildcats":
+   ["perth wildcats","perth"],
 
-function parseJSON(text){
+ "adelaide 36ers":
+   ["adelaide 36ers","adelaide"],
 
-  try{
-    return JSON.parse(text);
-  }
-  catch(e){}
+ "new zealand breakers":
+   ["new zealand breakers","new zealand breakers","nz breakers"],
 
-  const first =
-    text.indexOf("{");
+ "tasmania jackjumpers":
+   ["tasmania jackjumpers","tasmania"],
 
-  const last =
-    text.lastIndexOf("}");
+ "south east melbourne phoenix":
+   ["south east melbourne phoenix","sem phoenix","melbourne phoenix"],
 
-  if(first >= 0 && last > first){
+ "cairns taipans":
+   ["cairns taipans","cairns"]
 
-    try{
-      return JSON.parse(
-        text.slice(first,last + 1)
-      );
-    }
-    catch(e){}
-
-  }
-
-  throw new Error(
-    "Sunucudan geçerli JSON alınamadı."
-  );
-
-}
+};
 
 
-/* =========================================================
-   İNTERNET İSTEĞİ
-   Önce SofaScore.
-   Çalışmazsa Jina geçidi.
-========================================================= */
+/* ---------------------------------------------------------
+   API'DEN TAKIM ARAMA
+   TheSportsDB
+--------------------------------------------------------- */
 
-async function getJSON(url){
+async function searchTeam(teamName){
 
-  const targets = [
+ const wanted = normalizeName(teamName);
 
-    url,
+ const url =
+   "https://www.thesportsdb.com/api/v1/json/3/searchteams.php?t="
+   + encodeURIComponent(teamName);
 
-    "https://r.jina.ai/" + url
+ const response = await fetch(url);
 
-  ];
+ if(!response.ok){
+   throw new Error("Takım servisine bağlanılamadı.");
+ }
 
+ const data = await response.json();
 
-  let lastError = null;
+ if(!data || !data.teams || !data.teams.length){
+   throw new Error(
+     '"' + teamName + '" için takım bulunamadı.'
+   );
+ }
 
+ let teams = data.teams;
 
-  for(const target of targets){
+ let exact = teams.find(t =>
+   normalizeName(t.strTeam) === wanted
+ );
 
-    const controller =
-      new AbortController();
+ if(exact) return exact;
 
-    const timer =
-      setTimeout(
-        () => controller.abort(),
-        15000
-      );
+ let aliasMatch = teams.find(t => {
 
+   const n = normalizeName(t.strTeam);
 
-    try{
+   return Object.values(aliases).some(list =>
+     list.includes(wanted) &&
+     list.some(a => n.includes(normalizeName(a)))
+   );
 
-      const response =
-        await fetch(
-          target,
-          {
-            method:"GET",
-            cache:"no-store",
-            signal:controller.signal,
-            headers:{
-              "Accept":
-              "application/json,text/plain,*/*"
-            }
-          }
-        );
+ });
 
+ if(aliasMatch) return aliasMatch;
 
-      clearTimeout(timer);
-
-
-      if(!response.ok){
-
-        throw new Error(
-          "HTTP " + response.status
-        );
-
-      }
-
-
-      const text =
-        await response.text();
-
-
-      if(!text.trim()){
-
-        throw new Error(
-          "Boş cevap"
-        );
-
-      }
-
-
-      return parseJSON(text);
-
-    }
-    catch(error){
-
-      clearTimeout(timer);
-
-      lastError = error;
-
-    }
-
-  }
-
-
-  throw lastError ||
-    new Error("İnternet bağlantısı kurulamadı.");
+ return teams[0];
 
 }
 
 
-/* =========================================================
-   TAKIM ARAMA
-========================================================= */
+/* ---------------------------------------------------------
+   TAKIMIN SON MAÇLARI
+--------------------------------------------------------- */
 
-async function searchTeam(userName){
+async function getLastGames(teamId){
 
-  const requested =
-    aliasName(userName);
+ const url =
+   "https://www.thesportsdb.com/api/v1/json/3/eventslast.php?id="
+   + encodeURIComponent(teamId);
 
-  const queries = [
+ const response = await fetch(url);
 
-    requested,
+ if(!response.ok){
+   throw new Error("Maç verisi alınamadı.");
+ }
 
-    userName.trim()
+ const data = await response.json();
 
-  ];
+ if(!data || !data.results){
+   return [];
+ }
 
-
-  let all = [];
-
-
-  for(const qText of queries){
-
-    try{
-
-      const url =
-        API +
-        "/search/all?q=" +
-        encodeURIComponent(qText);
-
-      const data =
-        await getJSON(url);
-
-
-      if(
-        Array.isArray(data.results)
-      ){
-
-        all.push(
-          ...data.results
-        );
-
-      }
-
-    }
-    catch(e){
-
-      console.log(
-        "Takım arama başarısız:",
-        qText,
-        e
-      );
-
-    }
-
-  }
-
-
-  const entities =
-    all
-      .map(x =>
-        x && x.entity
-      )
-      .filter(Boolean);
-
-
-  const teams =
-    entities.filter(x =>
-
-      x.id &&
-      x.name &&
-      (
-        !x.sport ||
-        x.sport.slug === "basketball" ||
-        x.sport.name === "Basketball"
-      )
-
-    );
-
-
-  if(!teams.length){
-
-    return null;
-
-  }
-
-
-  const wanted =
-    norm(requested);
-
-
-  /* Tam eşleşme */
-
-  const exact =
-    teams.find(
-      t =>
-      norm(t.name) === wanted
-    );
-
-
-  if(exact){
-
-    return exact;
-
-  }
-
-
-  /* İçeriyor */
-
-  const contains =
-    teams.find(t => {
-
-      const n =
-        norm(t.name);
-
-      return (
-        n.includes(wanted) ||
-        wanted.includes(n)
-      );
-
-    });
-
-
-  if(contains){
-
-    return contains;
-
-  }
-
-
-  /* Kelime eşleşmesi */
-
-  const words =
-    wanted
-      .split(" ")
-      .filter(w => w.length >= 3);
-
-
-  let best = null;
-
-  let bestScore = -1;
-
-
-  for(const t of teams){
-
-    const n =
-      norm(t.name);
-
-    let score = 0;
-
-
-    for(const word of words){
-
-      if(n.includes(word)){
-
-        score++;
-
-      }
-
-    }
-
-
-    if(score > bestScore){
-
-      bestScore = score;
-
-      best = t;
-
-    }
-
-  }
-
-
-  return best || teams[0];
+ return data.results;
 
 }
 
 
-/* =========================================================
-   SKOR
-========================================================= */
+/* ---------------------------------------------------------
+   MAÇLARI TEMİZLE
+--------------------------------------------------------- */
 
-function numericScore(score){
+function parseGames(games,teamId){
 
-  if(!score){
+ const values = [];
 
-    return null;
+ for(const game of games){
 
-  }
+   if(!game.intHomeScore || !game.intAwayScore){
+     continue;
+   }
 
+   const homeScore = Number(game.intHomeScore);
+   const awayScore = Number(game.intAwayScore);
 
-  const values = [
+   if(
+     !Number.isFinite(homeScore) ||
+     !Number.isFinite(awayScore)
+   ){
+     continue;
+   }
 
-    score.normaltime,
+   const homeId = String(game.idHomeTeam);
+   const awayId = String(game.idAwayTeam);
 
-    score.current,
+   const isHome = homeId === String(teamId);
 
-    score.display
+   const scored = isHome ? homeScore : awayScore;
+   const conceded = isHome ? awayScore : homeScore;
 
-  ];
+   values.push({
+     scored,
+     conceded,
+     total:homeScore + awayScore,
+     date:game.dateEvent || ""
+   });
 
+ }
 
-  for(const value of values){
-
-    if(
-      typeof value === "number" &&
-      Number.isFinite(value)
-    ){
-
-      return value;
-
-    }
-
-  }
-
-
-  return null;
+ return values;
 
 }
 
 
-/* =========================================================
-   SON MAÇLAR
-========================================================= */
-
-async function getGames(teamId){
-
-  const games = [];
-
-  const seen = new Set();
-
-
-  /*
-    0-5 = yaklaşık son 60 maçlık alan.
-    Sadece bitmiş maçlar alınır.
-  */
-
-  for(
-    let page = 0;
-    page < 6;
-    page++
-  ){
-
-    const url =
-      API +
-      "/team/" +
-      encodeURIComponent(teamId) +
-      "/events/last/" +
-      page;
-
-
-    try{
-
-      const data =
-        await getJSON(url);
-
-
-      const events =
-        Array.isArray(data.events)
-          ? data.events
-          : [];
-
-
-      for(const event of events){
-
-        if(
-          !event ||
-          !event.homeTeam ||
-          !event.awayTeam
-        ){
-
-          continue;
-
-        }
-
-
-        const finished =
-
-          event.status &&
-          (
-            event.status.type ===
-            "finished" ||
-
-            event.status.type ===
-            "finishedbyperiods"
-          );
-
-
-        if(!finished){
-
-          continue;
-
-        }
-
-
-        const homeScore =
-          numericScore(
-            event.homeScore
-          );
-
-        const awayScore =
-          numericScore(
-            event.awayScore
-          );
-
-
-        if(
-          homeScore === null ||
-          awayScore === null
-        ){
-
-          continue;
-
-        }
-
-
-        if(seen.has(event.id)){
-
-          continue;
-
-        }
-
-
-        seen.add(event.id);
-
-
-        games.push({
-
-          id:event.id,
-
-          event:event,
-
-          home:homeScore,
-
-          away:awayScore
-
-        });
-
-      }
-
-    }
-    catch(error){
-
-      console.log(
-        "Maç sayfası okunamadı:",
-        page,
-        error
-      );
-
-    }
-
-  }
-
-
-  /*
-    Tarihe göre yeniden eskiye.
-  */
-
-  games.sort(
-    (a,b) =>
-      (b.event.startTimestamp || 0) -
-      (a.event.startTimestamp || 0)
-  );
-
-
-  return games.slice(0,10);
-
-}
-
-
-/* =========================================================
+/* ---------------------------------------------------------
    ORTALAMA
-========================================================= */
+--------------------------------------------------------- */
 
-function average(values){
+function average(arr){
 
-  if(!values.length){
+ if(!arr.length) return 0;
 
-    return 0;
-
-  }
-
-
-  return (
-    values.reduce(
-      (a,b) => a + b,
-      0
-    ) /
-    values.length
-  );
+ return arr.reduce((a,b)=>a+b,0) / arr.length;
 
 }
 
 
-/* =========================================================
+/* ---------------------------------------------------------
    TAKIM İSTATİSTİĞİ
-========================================================= */
+--------------------------------------------------------- */
 
-async function teamStats(team){
+function teamStats(games,teamId){
 
-  const games =
-    await getGames(team.id);
+ const parsed = parseGames(games,teamId);
 
+ if(!parsed.length){
+   return {
+     games:0,
+     attack:0,
+     defense:0,
+     winRate:50
+   };
+ }
 
-  const scored = [];
+ const attack =
+   average(parsed.map(x=>x.scored));
 
-  const conceded = [];
+ const defense =
+   average(parsed.map(x=>x.conceded));
 
+ const wins =
+   parsed.filter(x=>x.scored>x.conceded).length;
 
-  for(const game of games){
+ const winRate =
+   wins / parsed.length * 100;
 
-    const homeId =
-      Number(
-        game.event.homeTeam.id
-      );
-
-    const teamId =
-      Number(team.id);
-
-
-    if(homeId === teamId){
-
-      scored.push(
-        game.home
-      );
-
-      conceded.push(
-        game.away
-      );
-
-    }
-    else{
-
-      scored.push(
-        game.away
-      );
-
-      conceded.push(
-        game.home
-      );
-
-    }
-
-  }
-
-
-  return {
-
-    id:team.id,
-
-    name:team.name,
-
-    games:games.length,
-
-    scored:
-      average(scored),
-
-    conceded:
-      average(conceded)
-
-  };
+ return {
+   games:parsed.length,
+   attack,
+   defense,
+   winRate
+ };
 
 }
 
 
-/* =========================================================
-   TAHMİN MODELİ
-========================================================= */
+/* ---------------------------------------------------------
+   PUAN SINIRLAMA
+--------------------------------------------------------- */
 
-function calculatePrediction(H,A){
+function clamp(value,min,max){
 
-  /*
-    Ev sahibi hücumu:
-    %55 kendi sayı ortalaması
-    %45 rakibin yediği
+ return Math.max(min,Math.min(max,value));
 
-    Deplasman:
-    %55 kendi sayı ortalaması
-    %45 ev sahibinin yediği
-  */
-
-  let homeScore =
-    H.scored * 0.55 +
-    A.conceded * 0.45;
+}
 
 
-  let awayScore =
-    A.scored * 0.55 +
-    H.conceded * 0.45;
+/* ---------------------------------------------------------
+   TAHMİN
+--------------------------------------------------------- */
+
+function calculatePrediction(home,away){
+
+ /*
+    Hücum %55
+    Rakip savunma %45
+ */
+
+ let homeScore =
+   home.attack * .55 +
+   away.defense * .45;
+
+ let awayScore =
+   away.attack * .55 +
+   home.defense * .45;
 
 
-  /*
-    Ev sahibi avantajı.
-  */
+ /*
+    Ev sahibi avantajı
+ */
 
-  homeScore += 2.5;
-
-
-  /*
-    Aşırı uçları biraz dengeler.
-  */
-
-  homeScore =
-    Math.max(
-      60,
-      Math.min(
-        140,
-        homeScore
-      )
-    );
+ homeScore += 3;
 
 
-  awayScore =
-    Math.max(
-      60,
-      Math.min(
-        140,
-        awayScore
-      )
-    );
+ /*
+    Takımın kendi performansı
+ */
+
+ homeScore =
+   homeScore * .75 +
+   home.attack * .25;
+
+ awayScore =
+   awayScore * .75 +
+   away.attack * .25;
 
 
-  const diff =
-    homeScore - awayScore;
+ /*
+    Aşırı uç değerleri engelle
+ */
+
+ homeScore = clamp(homeScore,60,140);
+ awayScore = clamp(awayScore,60,140);
 
 
-  /*
+ /*
+    Fark
+ */
+
+ const difference =
+   homeScore - awayScore;
+
+
+ /*
     Kazanma olasılığı.
-  */
+    Fark büyüdükçe olasılık artar.
+ */
 
-  let homeWin =
-    50 + diff * 2.2;
-
-
-  homeWin =
-    Math.max(
-      5,
-      Math.min(
-        95,
-        homeWin
-      )
-    );
+ let homeProbability =
+   50 + difference * 2.8;
 
 
-  /*
-    Veri miktarına göre güven.
-  */
+ /*
+    Son maç kazanma oranlarının etkisi
+ */
 
-  const games =
-    Math.min(
-      H.games,
-      A.games
-    );
+ const formDifference =
+   home.winRate - away.winRate;
 
-
-  let confidence =
-    50 +
-    Math.min(
-      25,
-      games * 2.5
-    );
+ homeProbability +=
+   formDifference * .12;
 
 
-  /*
-    İki takım arasındaki farkın büyüklüğü
-    güveni bir miktar artırır.
-  */
-
-  confidence +=
-    Math.min(
-      15,
-      Math.abs(diff) * 0.8
-    );
+ homeProbability =
+   clamp(homeProbability,5,95);
 
 
-  confidence =
-    Math.max(
-      50,
-      Math.min(
-        90,
-        confidence
-      )
-    );
+ const awayProbability =
+   100 - homeProbability;
 
 
-  return {
+ /*
+    Güven
+ */
 
-    home:
-      Math.round(homeScore),
+ const games =
+   Math.min(home.games,away.games);
 
-    away:
-      Math.round(awayScore),
+ let confidence =
+   52 +
+   games * 2.5 +
+   Math.min(15,Math.abs(difference));
 
-    homeWin:
-      Math.round(homeWin),
+ confidence =
+   clamp(confidence,50,95);
 
-    confidence:
-      Math.round(confidence)
 
-  };
+ return {
+   homeScore,
+   awayScore,
+   difference,
+   homeProbability,
+   awayProbability,
+   confidence
+ };
 
 }
 
 
-/* =========================================================
-   GİRİŞ
-========================================================= */
+/* ---------------------------------------------------------
+   DURUM MESAJI
+--------------------------------------------------------- */
 
-function login(){
+function setStatus(text,type="info"){
 
-  if(
-    $("pass").value ===
-    PASSWORD
-  ){
+ statusBox.className =
+   "status " + type;
 
-    $("login")
-      .classList
-      .add("hide");
-
-
-    $("app")
-      .classList
-      .remove("hide");
-
-
-    $("loginMsg")
-      .textContent = "";
-
-  }
-  else{
-
-    $("loginMsg")
-      .textContent =
-      "Şifre yanlış.";
-
-  }
+ statusBox.textContent = text;
 
 }
 
 
-/* =========================================================
-   TAHMİNİ BAŞLAT
-========================================================= */
+/* ---------------------------------------------------------
+   ANA ANALİZ
+--------------------------------------------------------- */
 
 async function start(){
 
-  const homeName =
-    $("home").value.trim();
+ const homeInput =
+   $("homeInput").value.trim();
 
-  const awayName =
-    $("away").value.trim();
+ const awayInput =
+   $("awayInput").value.trim();
 
 
-  if(
-    !homeName ||
-    !awayName
-  ){
+ if(!homeInput){
 
-    $("status").innerHTML =
-      '<span class="bad">⚠ İki takım adını da yaz.</span>';
+   setStatus(
+     "⚠️ Ev sahibi takım adını gir.",
+     "bad"
+   );
 
-    return;
+   return;
 
-  }
+ }
 
+ if(!awayInput){
 
-  $("predictBtn").disabled =
-    true;
+   setStatus(
+     "⚠️ Deplasman takım adını gir.",
+     "bad"
+   );
 
+   return;
 
-  $("result")
-    .classList
-    .add("hide");
+ }
 
 
-  $("status").innerHTML =
-    '<div class="loading">🔎 Takımlar aranıyor...</div>';
+ if(
+   normalizeName(homeInput) ===
+   normalizeName(awayInput)
+ ){
 
+   setStatus(
+     "⚠️ İki takım aynı olamaz.",
+     "bad"
+   );
 
-  try{
+   return;
 
-    /*
-      EV SAHİBİ
-    */
+ }
 
-    const homeTeam =
-      await searchTeam(
-        homeName
-      );
 
+ button.disabled = true;
 
-    if(!homeTeam){
+ resultBox.classList.add("hidden");
 
-      throw new Error(
-        "Ev sahibi bulunamadı. İnternet veri kaynağına erişilemiyor veya takım adı bulunamadı."
-      );
 
-    }
+ try{
 
+   setStatus(
+     "🔎 Takımlar aranıyor...",
+     "info"
+   );
 
-    $("status").innerHTML =
-      "🏀 Ev sahibi: <b>" +
-      homeTeam.name +
-      "</b><br>" +
-      "🔎 Deplasman aranıyor...";
 
+   const homeTeam =
+     await searchTeam(homeInput);
 
-    /*
-      DEPLASMAN
-    */
 
-    const awayTeam =
-      await searchTeam(
-        awayName
-      );
+   setStatus(
+     "🔎 " +
+     homeTeam.strTeam +
+     " verileri alınıyor...",
+     "info"
+   );
 
 
-    if(!awayTeam){
+   const awayTeam =
+     await searchTeam(awayInput);
 
-      throw new Error(
-        "Deplasman takımı bulunamadı."
-      );
 
-    }
+   setStatus(
+     "📊 Son maçlar alınıyor...",
+     "info"
+   );
 
 
-    $("status").innerHTML =
-      "🏀 " +
-      homeTeam.name +
-      "<br>" +
-      "🏀 " +
-      awayTeam.name +
-      "<br>" +
-      "📊 Son maçlar internetten alınıyor...";
+   const [homeGames,awayGames] =
+     await Promise.all([
+       getLastGames(homeTeam.idTeam),
+       getLastGames(awayTeam.idTeam)
+     ]);
 
 
-    /*
-      İKİ TAKIMIN VERİLERİ
-    */
+   const home =
+     teamStats(
+       homeGames,
+       homeTeam.idTeam
+     );
 
-    const [
-      H,
-      A
-    ] =
-      await Promise.all([
 
-        teamStats(homeTeam),
+   const away =
+     teamStats(
+       awayGames,
+       awayTeam.idTeam
+     );
 
-        teamStats(awayTeam)
 
-      ]);
+   if(home.games < 3){
 
+     throw new Error(
+       homeTeam.strTeam +
+       " için yeterli geçmiş maç verisi bulunamadı."
+     );
 
-    if(H.games < 2){
+   }
 
-      throw new Error(
-        H.name +
-        " için yeterli son maç verisi alınamadı."
-      );
 
-    }
+   if(away.games < 3){
 
+     throw new Error(
+       awayTeam.strTeam +
+       " için yeterli geçmiş maç verisi bulunamadı."
+     );
 
-    if(A.games < 2){
+   }
 
-      throw new Error(
-        A.name +
-        " için yeterli son maç verisi alınamadı."
-      );
 
-    }
+   setStatus(
+     "🧮 Tahmin hesaplanıyor...",
+     "info"
+   );
 
 
-    /*
-      TAHMİN
-    */
+   const prediction =
+     calculatePrediction(home,away);
 
-    const prediction =
-      calculatePrediction(
-        H,
-        A
-      );
 
+   $("homeName").textContent =
+     homeTeam.strTeam;
 
-    /*
-      SONUÇ
-    */
+   $("awayName").textContent =
+     awayTeam.strTeam;
 
-    $("teams").innerHTML =
-      "<b>" +
-      H.name +
-      "</b> vs <b>" +
-      A.name +
-      "</b>";
 
+   $("homeScore").textContent =
+     Math.round(prediction.homeScore);
 
-    $("score").textContent =
-      prediction.home +
-      " - " +
-      prediction.away;
+   $("awayScore").textContent =
+     Math.round(prediction.awayScore);
 
 
-    $("win").textContent =
-      "%" +
-      prediction.homeWin;
+   $("homeProb").textContent =
+     Math.round(prediction.homeProbability)
+     + "%";
 
 
-    $("confidence").textContent =
-      "%" +
-      prediction.confidence;
+   $("awayProb").textContent =
+     Math.round(prediction.awayProbability)
+     + "%";
 
 
-    $("hpts").textContent =
-      H.scored.toFixed(1);
+   $("homeAvg").textContent =
+     home.attack.toFixed(1);
 
 
-    $("apts").textContent =
-      A.scored.toFixed(1);
+   $("awayAvg").textContent =
+     away.attack.toFixed(1);
 
 
-    $("hopp").textContent =
-      H.conceded.toFixed(1);
+   $("homeDef").textContent =
+     home.defense.toFixed(1);
 
 
-    $("aopp").textContent =
-      A.conceded.toFixed(1);
+   $("awayDef").textContent =
+     away.defense.toFixed(1);
 
 
-    $("games").textContent =
-      H.games +
-      " / " +
-      A.games;
+   $("winHome").style.width =
+     prediction.homeProbability + "%";
 
 
-    $("source").textContent =
-      "Kaynak: SofaScore kamuya açık maç verileri. " +
-      "Tahmin; son maç sayı ortalamaları, rakibin yediği sayılar ve ev sahibi avantajı kullanılarak hesaplanmıştır.";
+   if(
+     prediction.homeProbability >=
+     prediction.awayProbability
+   ){
 
+     $("winner").textContent =
+       "🏆 Tahmin: " +
+       homeTeam.strTeam;
 
-    $("result")
-      .classList
-      .remove("hide");
+   }else{
 
+     $("winner").textContent =
+       "🏆 Tahmin: " +
+       awayTeam.strTeam;
 
-    $("status").innerHTML =
-      '<span class="good">✅ Veriler alındı ve tahmin oluşturuldu.</span>';
+   }
 
 
-  }
-  catch(error){
+   $("confidence").textContent =
+     "🎯 Tahmin güveni: " +
+     Math.round(prediction.confidence) +
+     "%";
 
-    console.error(error);
 
+   $("leagueText").textContent =
+     "📈 Kullanılan maç sayısı: " +
+     home.games +
+     " / " +
+     away.games;
 
-    $("status").innerHTML =
-      '<span class="bad">⚠ ' +
-      (
-        error.message ||
-        "Veri alınırken hata oluştu."
-      ) +
-      '</span>';
 
-  }
-  finally{
+   resultBox.classList.remove("hidden");
 
-    $("predictBtn").disabled =
-      false;
 
-  }
+   setStatus(
+     "✅ Veriler alındı ve tahmin oluşturuldu.",
+     "good"
+   );
+
+ }catch(error){
+
+   console.error(error);
+
+   setStatus(
+     "⚠️ " +
+     (error.message ||
+      "Veri alınırken bir hata oluştu."),
+     "bad"
+   );
+
+ }finally{
+
+   button.disabled = false;
+
+ }
 
 }
 
 
-/* =========================================================
-   BUTONLAR
-========================================================= */
-
-$("loginBtn")
-  .addEventListener(
-    "click",
-    login
-  );
-
-
-$("pass")
-  .addEventListener(
-    "keydown",
-    event => {
-
-      if(
-        event.key === "Enter"
-      ){
-
-        login();
-
-      }
-
-    }
-  );
-
-
-$("predictBtn")
-  .addEventListener(
-    "click",
-    start
-  );
+button.addEventListener(
+ "click",
+ start
+);
 
 </script>
 
